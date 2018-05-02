@@ -18,7 +18,7 @@ public class NetworkUtils {
     final static String PRAM_SORT = "sort";
 
     //Will need to provide YOUR OWN API_Key
-    final static String API_KEY = "7147147683690403e3dea3545f41f5f4";
+    final static String API_KEY = "";
 
     //Constants to build URL String for movie poster
     final static String MOVIEDB_POSTER_BASE_URL = "http://imge.tmdb.org/t/p/";
