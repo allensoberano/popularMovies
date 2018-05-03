@@ -4,7 +4,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.android.popularmovies.model.Movie;
+import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
             if (jsonString != null && !jsonString.equals("")) {
                 //mTextView.setText(s)
                 //Check what S is
+
+                try {
+                    Movie[] movie = JsonUtils.parseMovieJson(jsonString);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
