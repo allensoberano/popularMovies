@@ -3,7 +3,10 @@ package com.example.android.popularmovies;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
+import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapater;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
@@ -15,13 +18,32 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private MovieRecyclerViewAdapater mAdapter;
+    private RecyclerView mMovieList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         makeMovieSearchQuery();
+
+        //Ref to RecyclerView from XML. Allows us to set the adapater of RV and toggle visibility.
+        mMovieList = (RecyclerView) findViewById(R.id.rv_movies);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mMovieList.setLayoutManager(linearLayoutManager);
+        mMovieList.setHasFixedSize(true);
+
+        //mAdapter = new MovieRecyclerViewAdapater(makeMovieSearchQuery());
+
+        //mMovieList.setAdapter(mAdapter);
+
+
+
+
+
+
 
     }
 
