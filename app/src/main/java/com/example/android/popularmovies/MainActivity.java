@@ -11,15 +11,15 @@ import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
     private MovieRecyclerViewAdapater mAdapter;
     private RecyclerView mMovieList;
+    private Movie[] mMovieData;
+
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
         //Ref to RecyclerView from XML. Allows us to set the adapater of RV and toggle visibility.
         mMovieList = (RecyclerView) findViewById(R.id.rv_movies);
         mMovieList.setLayoutManager(new GridLayoutManager(this, 3));
         mMovieList.setHasFixedSize(true);
+
 
         makeMovieSearchQuery();
 
@@ -49,41 +49,29 @@ public class MainActivity extends AppCompatActivity {
 
     //Asnyc Task to query api on background thread
     //*Reference: Lesson02_05
-    public class MovieQueryTask extends AsyncTask<URL, Void, String> {
+    public class MovieQueryTask extends AsyncTask<URL, Void, Movie[]> {
 
         @Override
-        protected String doInBackground(URL... urls) {
+        protected Movie[] doInBackground(URL... urls) {
             URL searchUrl = urls[0];
-            String movieSearchResults = null;
+            String movieSearchResults;
             try {
                 movieSearchResults = NetworkUtils.getResponseFromHTTPUrl(searchUrl);
-            } catch (IOException e) {
+                mMovieData = JsonUtils.parseMovieJson(movieSearchResults);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            return movieSearchResults;
+            return mMovieData;
         }
 
         @Override
-        protected void onPostExecute(String jsonString) {
-            if (jsonString != null && !jsonString.equals("")) {
-                //mTextView.setText(s)
-                //Check what S is
+        protected void onPostExecute(Movie[] movie) {
 
-                try {
-                    Movie[] movie = JsonUtils.parseMovieJson(jsonString);
-                    MovieRecyclerViewAdapater movieRecyclerViewAdapater = new MovieRecyclerViewAdapater(MainActivity.this, movie);
-
-                    //mAdapter = new MovieRecyclerViewAdapater();
-
-                    mMovieList.setAdapter(movieRecyclerViewAdapater);
-
-                    int a = 0;
+            MovieRecyclerViewAdapater movieRecyclerViewAdapater = new MovieRecyclerViewAdapater(MainActivity.this, movie);
+            mMovieList.setAdapter(movieRecyclerViewAdapater);
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }
+
