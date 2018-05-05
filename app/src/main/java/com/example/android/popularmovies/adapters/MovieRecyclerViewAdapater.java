@@ -17,7 +17,7 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
     private final Context mContext;
     private Movie[] mMovie = null;
 
-    private static final String URL_POSTER_PATH = "http://image.tmdb.org/t/p/W185";
+    private static final String POSTER_PATH = "http://image.tmdb.org/t/p/W185";
     //private static final String POSTER_SIZE = "w185";
 
     //Constructor
@@ -42,7 +42,7 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
         Picasso.with(mContext)
-                .load(URL_POSTER_PATH.concat(mMovie[position].getmPoster()))
+                .load(POSTER_PATH.concat(mMovie[position].getmPoster()))
                 .fit()
                 .into(holder.listItemImageView);
 
@@ -66,9 +66,7 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
             listItemImageView = (ImageView) itemView.findViewById(R.id.iv_movie_image);
         }
 
-//        void bind(int listIndex) {
-//            listItemImageView.setImageResource();
-//        }
+
         @Override
         public void onClick(View v) {
 

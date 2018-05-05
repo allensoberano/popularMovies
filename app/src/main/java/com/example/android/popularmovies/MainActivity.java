@@ -35,20 +35,11 @@ public class MainActivity extends AppCompatActivity {
         mMovieList.setLayoutManager(linearLayoutManager);
         mMovieList.setHasFixedSize(true);
 
-        //mAdapter = new MovieRecyclerViewAdapater(makeMovieSearchQuery());
-
-        //mMovieList.setAdapter(mAdapter);
-
-
-
-
-
-
 
     }
 
     //creates movie search query string
-    private void makeMovieSearchQuery(){
+    private void makeMovieSearchQuery() {
         String movieQuery = "";
         URL movieSearchUrl = NetworkUtils.buildUrl(movieQuery);
 
@@ -58,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Asnyc Task to query api on background thread
     //*Reference: Lesson02_05
-    public class MovieQueryTask extends AsyncTask<URL, Void, String>{
+    public class MovieQueryTask extends AsyncTask<URL, Void, String> {
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -73,13 +64,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String jsonString){
+        protected void onPostExecute(String jsonString) {
             if (jsonString != null && !jsonString.equals("")) {
                 //mTextView.setText(s)
                 //Check what S is
 
                 try {
                     Movie[] movie = JsonUtils.parseMovieJson(jsonString);
+                    MovieRecyclerViewAdapater movieRecyclerViewAdapater = new MovieRecyclerViewAdapater(MainActivity.this, movie);
+
+                    //mAdapter = new MovieRecyclerViewAdapater();
+
+                    mMovieList.setAdapter(movieRecyclerViewAdapater);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
