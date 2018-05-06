@@ -26,11 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //Ref to RecyclerView from XML. Allows us to set the adapater of RV and toggle visibility.
         mMovieList = (RecyclerView) findViewById(R.id.rv_movies);
-        mMovieList.setLayoutManager(new GridLayoutManager(this, 3));
+        mMovieList.setLayoutManager(new GridLayoutManager(this, 2));
+
+        mAdapter = new MovieRecyclerViewAdapater(this, mMovieData);
         mMovieList.setHasFixedSize(true);
+        mMovieList.setAdapter(mAdapter);
+
 
 
         makeMovieSearchQuery();
@@ -67,8 +70,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Movie[] movie) {
 
+            //Movie[] movie = JsonUtils.parseMovieJson(jsonString);
+
             MovieRecyclerViewAdapater movieRecyclerViewAdapater = new MovieRecyclerViewAdapater(MainActivity.this, movie);
             mMovieList.setAdapter(movieRecyclerViewAdapater);
+           movieRecyclerViewAdapater.notifyDataSetChanged();
+
 
 
         }

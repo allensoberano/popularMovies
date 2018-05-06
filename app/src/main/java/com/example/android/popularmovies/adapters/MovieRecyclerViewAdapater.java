@@ -17,7 +17,7 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
     private final Context mContext;
     private Movie[] mMovie = null;
 
-    private static final String POSTER_PATH = "http://image.tmdb.org/t/p/W185";
+    private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
     //private static final String POSTER_SIZE = "w185";
 
     //Constructor
@@ -41,10 +41,14 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
-        Picasso.with(mContext)
-                .load(POSTER_PATH.concat(mMovie[position].getmPoster()))
-                .fit()
-                .into(holder.listItemImageView);
+
+
+        if (mMovie != null) {
+            Picasso.with(mContext)
+                    .load(POSTER_PATH.concat(mMovie[position].getmPoster()))
+                    .fit()
+                    .into(holder.listItemImageView);
+        }
 
         //Picasso.load("http://i.imgur.com/DvpvklR.png").into(holder.listItemImageView);
 
@@ -53,7 +57,11 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
     //returns the number of items in our data source
     @Override
     public int getItemCount() {
-        return mMovie.length;
+        if (mMovie == null){
+            return 20;
+        } else {
+            return mMovie.length;
+        }
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
