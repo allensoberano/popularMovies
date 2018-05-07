@@ -13,27 +13,28 @@ import com.squareup.picasso.Picasso;
 
 public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecyclerViewAdapater.MovieViewHolder> {
 
-    private int mNumberItems;
     private final Context mContext;
     private Movie[] mMovie = null;
+    private ItemClickListener mItemClickListener;
 
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
-    //private static final String POSTER_SIZE = "w185";
 
     //Constructor
-    public MovieRecyclerViewAdapater(Context context, Movie[] movies ){
+    public MovieRecyclerViewAdapater(Context context, Movie[] movies) {
+
         //init member variables
         mMovie = movies;
         mContext = context;
 
     }
+
     //When the RecyclerView Instantiats a new view holder instance
     //Reference: RecylerView Webcast
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movie_list_item, parent, false);
-        //MovieViewHolder viewHolder = new MovieViewHolder(view);
+
         return new MovieViewHolder(view);
     }
 
@@ -41,42 +42,46 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
-
-
         if (mMovie != null) {
             Picasso.with(mContext)
                     .load(POSTER_PATH.concat(mMovie[position].getmPoster()))
                     .fit()
                     .into(holder.listItemImageView);
         }
-
-        //Picasso.load("http://i.imgur.com/DvpvklR.png").into(holder.listItemImageView);
-
     }
 
     //returns the number of items in our data source
     @Override
     public int getItemCount() {
-        if (mMovie == null){
+
+        //Feel like there is a better way than this
+        if (mMovie == null) {
             return 20;
         } else {
             return mMovie.length;
         }
     }
 
+    public interface ItemClickListener {
+        void onItemClick(int position);
+    }
+
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView listItemImageView;
 
-        public MovieViewHolder (View itemView) {
+        public MovieViewHolder(View itemView) {
             super(itemView);
 
-            listItemImageView = (ImageView) itemView.findViewById(R.id.iv_movie_image);
+            listItemImageView = itemView.findViewById(R.id.iv_movie_image);
+            listItemImageView.setOnClickListener(this);
         }
 
 
         @Override
         public void onClick(View v) {
+
+            if (mItemClickListener != null) mItemClickListener.onItemClick(getAdapterPosition());
 
         }
     }

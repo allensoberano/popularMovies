@@ -13,7 +13,7 @@ public class NetworkUtils {
 
     //Constants to build URL String for movies
     //* Reference: Lesson02_03 Exercise build URL
-    final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie/popular";
+    final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     final static String PARAM_QUERY = "api_key";
     final static String PRAM_SORT = "sort";
 
@@ -26,10 +26,11 @@ public class NetworkUtils {
     final static String IMAGE_REF = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
 
     //* Reference: Lesson 02_03
-    public static URL buildUrl(String movieDBSearchQuery){
+    public static URL buildUrl(String sortBy){
         //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath(sortBy)
                 .appendQueryParameter(PARAM_QUERY, API_KEY)
                 .build();
 

@@ -8,15 +8,6 @@ import org.json.JSONObject;
 
 public class JsonUtils {
 
-    //Constants for the OptStrings for easier reference and updates
-    private static String MOVIE_RESULTS = "results";
-    private static String MOVIE_ID = "id";
-    private static String MOVIE_RATING = "vote_average";
-    private static String MOVIE_TITLE = "title";
-    private static String MOVIE_POSTER = "poster_path";
-    private static String MOVIE_OVERVIEW = "overview";
-    private static String MOVIE_RELEASE_DATE = "release_date";
-
 
     public static Movie[] parseMovieJson(String json) throws JSONException {
 
@@ -37,6 +28,14 @@ public class JsonUtils {
     }
 
     private static Movie createMovieObject(JSONObject movieData){
+        //Constants for the OptStrings for easier reference and updates
+        final String MOVIE_RESULTS = "results";
+        final String MOVIE_ID = "id";
+        final String MOVIE_RATING = "vote_average";
+        final String MOVIE_TITLE = "title";
+        final String MOVIE_POSTER = "poster_path";
+        final String MOVIE_OVERVIEW = "overview";
+        final String MOVIE_RELEASE_DATE = "release_date";
 
         Movie movie = new Movie();
 
