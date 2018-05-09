@@ -18,6 +18,7 @@ public class JsonUtils {
 
         //loop through results array, create movie object and return in MovieArray
         for (int i = 0; i <moviesResults.length(); i++){
+
             Movie movie = new Movie();
             JSONObject movieData = moviesResults.getJSONObject(i);
 

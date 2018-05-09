@@ -1,6 +1,9 @@
 package com.example.android.popularmovies.model;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movie implements Parcelable {
 
     private int mId;
     private String mTitle;
@@ -56,4 +59,48 @@ public class Movie {
     public void setmDescription(String mDescription) {
         this.mDescription = mDescription;
     }
+
+    //region Parcelable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public Movie(Parcel in) {
+        mId = in.readInt();
+        mTitle = in.readString();
+        mPoster = in.readString();
+        mReleaseDate = in.readString();
+        mRating = in.readInt();
+        mDescription = in.readString();
+    }
+
+    //int flags used more for arrays
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(mId);
+        dest.writeString(mTitle);
+        dest.writeString(mPoster);
+        dest.writeString(mReleaseDate);
+        dest.writeInt(mRating);
+        dest.writeString(mDescription);
+
+    }
+
+    //To Receive and Decode Parcel
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+    //endregion
+
+
 }

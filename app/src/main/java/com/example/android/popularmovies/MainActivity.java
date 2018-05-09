@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapater;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.JsonUtils;
+import com.example.android.popularmovies.utilities.MovieDetailActivity;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import java.net.URL;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Build Search Query
         makeMovieSearchQuery(sortOrder);
+
 
     }
 
@@ -103,5 +106,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     //endregion
+
+    private void launchMovieDetailActivity(int position) {
+
+
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(MovieDetailActivity.EXTRA_POSITION, position);
+        startActivity(intent);
+    }
 }
 
