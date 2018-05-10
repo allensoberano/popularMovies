@@ -17,7 +17,7 @@ import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieRecyclerViewAdapater.ItemClickListener {
 
     private MovieRecyclerViewAdapater mAdapter;
     private RecyclerView mMovieList;
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     //region Menu
     //*Reference Lesson 02_06 Add Menu
     @Override
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     //endregion
+
 
     //creates movie search query string
     private void makeMovieSearchQuery(String sortBy) {
@@ -76,6 +80,16 @@ public class MainActivity extends AppCompatActivity {
 
         String movieSearchResults = null;
         new MovieQueryTask().execute(movieSearchUrl);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        launchMovieDetailActivity(position);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 
     //region Async Task
@@ -109,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchMovieDetailActivity(int position) {
 
-
+        Movie movieToSend = new Movie();
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra(MovieDetailActivity.EXTRA_POSITION, position);
+        intent.putExtra("movie", movieToSend);
         startActivity(intent);
     }
 }

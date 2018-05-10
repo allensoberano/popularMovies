@@ -12,10 +12,10 @@ import com.example.android.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecyclerViewAdapater.MovieViewHolder> {
-
     private final Context mContext;
     private Movie[] mMovie = null;
     private ItemClickListener mItemClickListener;
+
 
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
 
@@ -81,7 +81,7 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
         @Override
         public void onClick(View v) {
 
-            if (mItemClickListener != null) mItemClickListener.onItemClick(getAdapterPosition());
+                mItemClickListener.onItemClick(getAdapterPosition());
 
         }
     }

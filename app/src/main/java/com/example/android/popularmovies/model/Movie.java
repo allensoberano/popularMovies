@@ -60,13 +60,21 @@ public class Movie implements Parcelable {
         this.mDescription = mDescription;
     }
 
+
+
     //region Parcelable
     @Override
     public int describeContents() {
         return 0;
     }
 
-    public Movie(Parcel in) {
+    public Movie() {
+
+    }
+
+    //Using 'in' variable, we retrieve the values we originally wrote into the Parcel.
+    //is private so only the CREATOR field can access
+    private Movie(Parcel in) {
         mId = in.readInt();
         mTitle = in.readString();
         mPoster = in.readString();
@@ -76,6 +84,7 @@ public class Movie implements Parcelable {
     }
 
     //int flags used more for arrays
+    //Values we want to save to the Parcel.
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
