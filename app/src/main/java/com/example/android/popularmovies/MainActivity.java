@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapater;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.JsonUtils;
-import com.example.android.popularmovies.utilities.MovieDetailActivity;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import java.net.URL;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList = (RecyclerView) findViewById(R.id.rv_movies);
         mMovieList.setLayoutManager(new GridLayoutManager(this, 2));
 
-        mAdapter = new MovieRecyclerViewAdapater(this, mMovieData);
+        mAdapter = new MovieRecyclerViewAdapater(this, mMovieData, this);
         mMovieList.setHasFixedSize(true);
         mMovieList.setAdapter(mAdapter);
 
@@ -44,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
 
     }
+
+    public interface ListItemClickListener{
+
+    }
+
 
 
 
@@ -113,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         @Override
         protected void onPostExecute(Movie[] movie) {
 
-            MovieRecyclerViewAdapater movieRecyclerViewAdapater = new MovieRecyclerViewAdapater(MainActivity.this, movie);
+            MovieRecyclerViewAdapater movieRecyclerViewAdapater = new MovieRecyclerViewAdapater(MainActivity.this, movie, MainActivity.this);
             mMovieList.setAdapter(movieRecyclerViewAdapater);
             movieRecyclerViewAdapater.notifyDataSetChanged();
 
@@ -122,8 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     //endregion
 
     private void launchMovieDetailActivity(int position) {
-
-        Movie movieToSend = new Movie();
+        Movie movieToSend = this.mMovieData[position];//new Movie();
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra("movie", movieToSend);
         startActivity(intent);

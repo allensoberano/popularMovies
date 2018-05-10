@@ -20,11 +20,12 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
 
     //Constructor
-    public MovieRecyclerViewAdapater(Context context, Movie[] movies) {
+    public MovieRecyclerViewAdapater(Context context, Movie[] movies, ItemClickListener listener) {
 
         //init member variables
         mMovie = movies;
         mContext = context;
+        mItemClickListener = listener;
 
     }
 
@@ -74,7 +75,8 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
             super(itemView);
 
             listItemImageView = itemView.findViewById(R.id.iv_movie_image);
-            listItemImageView.setOnClickListener(this);
+            //listItemImageView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
 
