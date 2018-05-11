@@ -32,7 +32,8 @@ public class JsonUtils {
         //Constants for the OptStrings for easier reference and updates
         final String MOVIE_RESULTS = "results";
         final String MOVIE_ID = "id";
-        final String MOVIE_RATING = "vote_average";
+        final String MOVIE_RATING = "rating";
+        final String MOVIE_VOTE_AVG = "vote_average";
         final String MOVIE_TITLE = "title";
         final String MOVIE_POSTER = "poster_path";
         final String MOVIE_OVERVIEW = "overview";
@@ -43,6 +44,7 @@ public class JsonUtils {
         //sets movie data points
         movie.setmId(movieData.optInt(MOVIE_ID));
         movie.setmRating(movieData.optInt(MOVIE_RATING));
+        movie.setmVoteAvg(movieData.optLong(MOVIE_VOTE_AVG));
         movie.setmTitle(movieData.optString(MOVIE_TITLE));
         movie.setmPoster(movieData.optString(MOVIE_POSTER));
         movie.setmDescription(movieData.optString(MOVIE_OVERVIEW));

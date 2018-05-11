@@ -21,9 +21,8 @@ public class NetworkUtils {
     final static String API_KEY = "";
 
     //Constants to build URL String for movie poster
-    final static String MOVIEDB_POSTER_BASE_URL = "http://imge.tmdb.org/t/p/";
-    final static String PARAM_SIZE = "w185//";
-    final static String IMAGE_REF = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
+    final static String MOVIEDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+    //final static String IMAGE_REF = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
 
     //* Reference: Lesson 02_03
     public static URL buildUrl(String sortBy){
@@ -34,13 +33,28 @@ public class NetworkUtils {
                 .appendQueryParameter(PARAM_QUERY, API_KEY)
                 .build();
 
+        return uriToURL(builtUri);
+    }
+
+    public static String posterURL(){
+//        Uri builtUri = Uri.parse(MOVIEDB_POSTER_BASE_URL).buildUpon()
+//                .appendPath(imageURL)
+//                .appendQueryParameter(PARAM_QUERY, API_KEY)
+//                .build();
+
+        return MOVIEDB_POSTER_BASE_URL;
+        //return builtUri.toString();
+        //return uriToURL(builtUri);
+    }
+
+
+    private static URL uriToURL(Uri builtUri){
         URL url = null;
         try {
             url = new URL(builtUri.toString());
         } catch (MalformedURLException e){
             e.printStackTrace();
         }
-
         return url;
     }
 
