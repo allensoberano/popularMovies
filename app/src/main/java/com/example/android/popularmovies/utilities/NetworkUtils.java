@@ -2,6 +2,8 @@ package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
 
+import com.example.android.popularmovies.BuildConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -18,11 +20,13 @@ public class NetworkUtils {
     //final static String PRAM_SORT = "sort";
 
     //Will need to provide YOUR OWN API_Key
-    private final static String API_KEY = "";
+    private final static String API_KEY = BuildConfig.ApiKey;
+
 
     //Constants to build URL String for movie poster
     private final static String MOVIEDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
     //final static String IMAGE_REF = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
+
 
     //* Reference: Lesson 02_03
     public static URL buildUrl(String sortBy){
@@ -41,6 +45,8 @@ public class NetworkUtils {
         return MOVIEDB_POSTER_BASE_URL;
 
     }
+
+
 
 
     private static URL uriToURL(Uri builtUri){

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -32,8 +33,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
         //Ref to RecyclerView from XML. Allows us to set the adapter of RV and toggle visibility.
         mMovieList = findViewById(R.id.rv_movies);
-        mMovieList.setLayoutManager(new GridLayoutManager(this, 2));
-
+        mMovieList.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
         mAdapter = new MovieRecyclerViewAdapter(this, mMovieData, this);
         mMovieList.setHasFixedSize(true);
         mMovieList.setAdapter(mAdapter);
@@ -41,7 +41,17 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         //Build Search Query
         makeMovieSearchQuery(sortOrder);
 
+    }
 
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
     }
 
 
