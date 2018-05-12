@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,7 +22,7 @@
                 android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:contentDescription="Movie Poster Image"
+                android:contentDescription="@string/content_movie_poster_image"
                 android:scaleType="fitCenter"
                 android:layout_gravity="center_horizontal" />
 
@@ -36,7 +35,8 @@
                 android:paddingBottom="5dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/white"
-                tools:text="Title Shows Here" />
+                tools:text="Title Shows Here"
+                android:contentDescription="@string/content_movie_title"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,6 +54,7 @@
                 android:numStars="5"
                 android:stepSize=".5"
                 android:layout_gravity="center"
+                android:contentDescription="@string/content_movie_rating"
                 />
 
             <LinearLayout
@@ -64,32 +65,37 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Release Date: "
+                    android:text="@string/release_date_label"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:contentDescription="@string/content_release_date_label"/>
 
                 <TextView
                     android:id="@+id/tv_release_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:text="Release Date Shows Here" />
+                    tools:text="Release Date Shows Here"
+                    android:contentDescription="@string/content_release_date"/>
 
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Description:"
+                android:text="@string/description_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:textStyle="bold"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/content_movie_plot_label"/>
+
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="Description Shows Here" />
+                tools:text="Description Shows Here"
+                android:contentDescription="@string/content_movie_plot"/>
 
         </LinearLayout>
         </LinearLayout>

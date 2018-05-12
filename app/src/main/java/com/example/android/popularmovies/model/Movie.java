@@ -3,6 +3,7 @@ package com.example.android.popularmovies.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
 public class Movie implements Parcelable {
 
     private int mId;
@@ -45,9 +46,7 @@ public class Movie implements Parcelable {
         this.mReleaseDate = mReleaseDate;
     }
 
-    public int getmRating() {
-        return mRating;
-    }
+    public int getmRating() { return mRating; }
 
     public void setmRating(int mRating) {
         this.mRating = mRating;
@@ -70,17 +69,18 @@ public class Movie implements Parcelable {
     }
 
 
-
     //region Parcelable
     @Override
     public int describeContents() {
         return 0;
     }
 
+    //Constructor
     public Movie() {
 
     }
 
+    //Constructor
     //Using 'in' variable, we retrieve the values we originally wrote into the Parcel.
     //is private so only the CREATOR field can access
     private Movie(Parcel in) {

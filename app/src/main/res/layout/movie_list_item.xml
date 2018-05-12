@@ -13,7 +13,7 @@
         android:scaleType="fitXY"
         android:layout_gravity="center_horizontal"
         android:padding="5dp"
-        android:contentDescription="Movie Image"
+        android:contentDescription="@string/content_movie_poster_image"
         />
 
 </LinearLayout>

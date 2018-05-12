@@ -9,32 +9,32 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapater;
+import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements MovieRecyclerViewAdapater.ItemClickListener {
+public class MainActivity extends AppCompatActivity implements MovieRecyclerViewAdapter.ItemClickListener {
 
-    private MovieRecyclerViewAdapater mAdapter;
     private RecyclerView mMovieList;
     private Movie[] mMovieData;
     private String sortOrder = "popular";
 
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Ref to RecyclerView from XML. Allows us to set the adapater of RV and toggle visibility.
-        mMovieList = (RecyclerView) findViewById(R.id.rv_movies);
+        MovieRecyclerViewAdapter mAdapter;
+
+        //Ref to RecyclerView from XML. Allows us to set the adapter of RV and toggle visibility.
+        mMovieList = findViewById(R.id.rv_movies);
         mMovieList.setLayoutManager(new GridLayoutManager(this, 2));
 
-        mAdapter = new MovieRecyclerViewAdapater(this, mMovieData, this);
+        mAdapter = new MovieRecyclerViewAdapter(this, mMovieData, this);
         mMovieList.setHasFixedSize(true);
         mMovieList.setAdapter(mAdapter);
 
@@ -43,11 +43,6 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
 
     }
-
-    public interface ListItemClickListener{
-
-    }
-
 
 
 
@@ -74,15 +69,13 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
         return super.onOptionsItemSelected(item);
     }
-
     //endregion
 
 
     //creates movie search query string
     private void makeMovieSearchQuery(String sortBy) {
-        URL movieSearchUrl = NetworkUtils.buildUrl(sortBy);
 
-        String movieSearchResults = null;
+        URL movieSearchUrl = NetworkUtils.buildUrl(sortBy);
         new MovieQueryTask().execute(movieSearchUrl);
     }
 
@@ -91,15 +84,11 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         launchMovieDetailActivity(position);
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        return super.onContextItemSelected(item);
-    }
 
     //region Async Task
-    //Asnyc Task to query api on background thread
+    //Async Task to query api on background thread
     //*Reference: Lesson02_05
-    public class MovieQueryTask extends AsyncTask<URL, Void, Movie[]> {
+    class MovieQueryTask extends AsyncTask<URL, Void, Movie[]> {
 
         @Override
         protected Movie[] doInBackground(URL... urls) {
@@ -117,9 +106,9 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         @Override
         protected void onPostExecute(Movie[] movie) {
 
-            MovieRecyclerViewAdapater movieRecyclerViewAdapater = new MovieRecyclerViewAdapater(MainActivity.this, movie, MainActivity.this);
-            mMovieList.setAdapter(movieRecyclerViewAdapater);
-            movieRecyclerViewAdapater.notifyDataSetChanged();
+            MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(MainActivity.this, movie, MainActivity.this);
+            mMovieList.setAdapter(movieRecyclerViewAdapter);
+            movieRecyclerViewAdapter.notifyDataSetChanged();
 
         }
     }

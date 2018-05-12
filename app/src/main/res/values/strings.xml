@@ -3,4 +3,18 @@
     <string name="popular">Popular</string>
     <string name="rating">Rating</string>
     <string name="sort">Sort</string>
+    <string name="release_date_label">Release Date:</string>
+
+    <string name="content_movie_poster_image">Movie Poster Image</string>
+
+    <string name="content_movie_title">Movie Title</string>
+
+    <string name="content_movie_rating">Movie Rating</string>
+
+    <string name="content_release_date_label">Release Date Label</string>
+    <string name="content_release_date">Release Date</string>
+
+    <string name="content_movie_plot_label">Movie Plot Description</string>
+    <string name="content_movie_plot">Movie Plot</string>
+    <string name="description_label">Description:</string>
 </resources>

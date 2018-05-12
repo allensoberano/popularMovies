@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -21,7 +22,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
-        Movie movieSent = (Movie) getIntent().getParcelableExtra("movie");
+        Movie movieSent = getIntent().getParcelableExtra("movie");
         populateDetailActivity(movieSent);
 
     }
@@ -35,7 +36,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
 
         mMovieTitle.setText(movieSent.getmTitle());
-        mRating.setRating((float)movieSent.getmVoteAvg()/2);
+        mRating.setRating(movieSent.getmVoteAvg()/2);
         mReleaseDate.setText(convertDate(movieSent.getmReleaseDate()));
         mDescription.setText(movieSent.getmDescription());
 
@@ -50,7 +51,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     //Converts the date to more familiar format
     //*Reference: Stack Overflow: https://stackoverflow.com/questions/9277747/android-simpledateformat-how-to-use-it
     private String convertDate(String dateToConvert){
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date date = null;
         try {
             date = fmt.parse(dateToConvert);
@@ -58,11 +59,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        SimpleDateFormat fmtOut = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat fmtOut = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
         return fmtOut.format(date);
     }
 
-//    private void setPoster(){
-//
-//    }
 }

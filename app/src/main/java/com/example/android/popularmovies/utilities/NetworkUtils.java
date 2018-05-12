@@ -13,15 +13,15 @@ public class NetworkUtils {
 
     //Constants to build URL String for movies
     //* Reference: Lesson02_03 Exercise build URL
-    final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
-    final static String PARAM_QUERY = "api_key";
-    final static String PRAM_SORT = "sort";
+    private final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
+    private final static String PARAM_QUERY = "api_key";
+    //final static String PRAM_SORT = "sort";
 
     //Will need to provide YOUR OWN API_Key
-    final static String API_KEY = "";
+    private final static String API_KEY = "";
 
     //Constants to build URL String for movie poster
-    final static String MOVIEDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+    private final static String MOVIEDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
     //final static String IMAGE_REF = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
 
     //* Reference: Lesson 02_03
@@ -37,14 +37,9 @@ public class NetworkUtils {
     }
 
     public static String posterURL(){
-//        Uri builtUri = Uri.parse(MOVIEDB_POSTER_BASE_URL).buildUpon()
-//                .appendPath(imageURL)
-//                .appendQueryParameter(PARAM_QUERY, API_KEY)
-//                .build();
 
         return MOVIEDB_POSTER_BASE_URL;
-        //return builtUri.toString();
-        //return uriToURL(builtUri);
+
     }
 
 

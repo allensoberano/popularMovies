@@ -19,9 +19,7 @@ public class JsonUtils {
         //loop through results array, create movie object and return in MovieArray
         for (int i = 0; i <moviesResults.length(); i++){
 
-            Movie movie = new Movie();
             JSONObject movieData = moviesResults.getJSONObject(i);
-
             movieArray[i] = createMovieObject(movieData);
         }
 
@@ -30,7 +28,7 @@ public class JsonUtils {
 
     private static Movie createMovieObject(JSONObject movieData){
         //Constants for the OptStrings for easier reference and updates
-        final String MOVIE_RESULTS = "results";
+        //final String MOVIE_RESULTS = "results";
         final String MOVIE_ID = "id";
         final String MOVIE_RATING = "rating";
         final String MOVIE_VOTE_AVG = "vote_average";

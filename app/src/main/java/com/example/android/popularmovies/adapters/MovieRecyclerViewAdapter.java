@@ -11,16 +11,16 @@ import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
-public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecyclerViewAdapater.MovieViewHolder> {
+public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
     private final Context mContext;
-    private Movie[] mMovie = null;
-    private ItemClickListener mItemClickListener;
+    private final Movie[] mMovie;
+    private final ItemClickListener mItemClickListener;
 
 
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
 
     //Constructor
-    public MovieRecyclerViewAdapater(Context context, Movie[] movies, ItemClickListener listener) {
+    public MovieRecyclerViewAdapter(Context context, Movie[] movies, ItemClickListener listener) {
 
         //init member variables
         mMovie = movies;
@@ -29,8 +29,8 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
 
     }
 
-    //When the RecyclerView Instantiats a new view holder instance
-    //Reference: RecylerView Webcast
+    //When the RecyclerView inits a new view holder instance
+    //Reference: RecyclerView Webcast
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -69,9 +69,9 @@ public class MovieRecyclerViewAdapater extends RecyclerView.Adapter<MovieRecycle
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView listItemImageView;
+        final ImageView listItemImageView;
 
-        public MovieViewHolder(View itemView) {
+        MovieViewHolder(View itemView) {
             super(itemView);
 
             listItemImageView = itemView.findViewById(R.id.iv_movie_image);
