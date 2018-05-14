@@ -47,8 +47,6 @@ public class NetworkUtils {
     }
 
 
-
-
     private static URL uriToURL(Uri builtUri){
         URL url = null;
         try {
