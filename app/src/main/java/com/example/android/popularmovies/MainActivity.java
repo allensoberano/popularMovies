@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
+import com.example.android.popularmovies.async.MovieQueryTask;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
@@ -38,7 +39,9 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList.setAdapter(mAdapter);
 
         //Build Search Query
-        makeMovieSearchQuery(sortOrder);
+        URL movieSearchUrl = NetworkUtils.buildUrl(sortOrder);
+        //Run Query
+        new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
 
     }
 
@@ -52,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         if (nColumns < 2) return 2;
         return nColumns;
     }
-
-
 
     //region Menu
     //*Reference Lesson 02_06 Add Menu
@@ -82,10 +83,9 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
 
     //creates movie search query string
-    private void makeMovieSearchQuery(String sortBy) {
+    public void makeMovieSearchQuery(String appendPath) {
 
-        URL movieSearchUrl = NetworkUtils.buildUrl(sortBy);
-        new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
+
 
     }
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         movieRecyclerViewAdapter.notifyDataSetChanged();
     }
 
-    //region AsyncTask
+    //region AsyncTask Listener
     public class MovieQueryTaskCompleteListener implements AsyncTaskCompleteListener<Movie[]>{
 
         @Override

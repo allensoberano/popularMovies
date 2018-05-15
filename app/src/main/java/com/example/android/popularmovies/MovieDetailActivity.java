@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -17,16 +18,37 @@ import java.util.Locale;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
+    private Movie mMovieSent;
+    private int mId;
+    private Movie[] mMovieData;
+    private MainActivity mainActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
-        Movie movieSent = getIntent().getParcelableExtra("movie");
-        populateDetailActivity(movieSent);
+        mMovieSent = getIntent().getParcelableExtra("movie");
+
+        mId = mMovieSent.getmId();
+
+        populateDetailActivity(mMovieSent);
 
     }
 
+    //region AsyncTask Listener
+    public class ReviewsTrailersCompleteListener implements AsyncTaskCompleteListener<Movie[]> {
+
+        @Override
+        public void onTaskComplete(Movie[] result) {
+            mMovieData = result;
+            //showMovies(mMovieData);
+        }
+    }
+    //endregion
+
+
+    //populates UI activity with data
     private void populateDetailActivity(Movie movieSent){
         ImageView mMoviePoster = findViewById(R.id.iv_movie_image);
         TextView mMovieTitle = findViewById(R.id.tv_movie_title);

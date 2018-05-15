@@ -29,11 +29,11 @@ public class NetworkUtils {
 
 
     //* Reference: Lesson 02_03
-    public static URL buildUrl(String sortBy){
+    public static URL buildUrl(String appendPath){
         //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendPath(sortBy)
+                .appendPath(appendPath)
                 .appendQueryParameter(PARAM_QUERY, API_KEY)
                 .build();
 
