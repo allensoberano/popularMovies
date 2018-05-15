@@ -1,7 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,8 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
+import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.model.Movie;
-import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import java.net.URL;
@@ -86,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     private void makeMovieSearchQuery(String sortBy) {
 
         URL movieSearchUrl = NetworkUtils.buildUrl(sortBy);
-        new MovieQueryTask().execute(movieSearchUrl);
+        new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
+
     }
 
     @Override
@@ -94,32 +94,19 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         launchMovieDetailActivity(position);
     }
 
+    private void showMovies(Movie[] movie){
+        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(MainActivity.this, movie, MainActivity.this);
+        mMovieList.setAdapter(movieRecyclerViewAdapter);
+        movieRecyclerViewAdapter.notifyDataSetChanged();
+    }
 
-    //region Async Task
-    //Async Task to query api on background thread
-    //*Reference: Lesson02_05
-    class MovieQueryTask extends AsyncTask<URL, Void, Movie[]> {
-
-        @Override
-        protected Movie[] doInBackground(URL... urls) {
-            URL searchUrl = urls[0];
-            String movieSearchResults;
-            try {
-                movieSearchResults = NetworkUtils.getResponseFromHTTPUrl(searchUrl);
-                mMovieData = JsonUtils.parseMovieJson(movieSearchResults);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mMovieData;
-        }
+    //region AsyncTask
+    public class MovieQueryTaskCompleteListener implements AsyncTaskCompleteListener<Movie[]>{
 
         @Override
-        protected void onPostExecute(Movie[] movie) {
-
-            MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(MainActivity.this, movie, MainActivity.this);
-            mMovieList.setAdapter(movieRecyclerViewAdapter);
-            movieRecyclerViewAdapter.notifyDataSetChanged();
-
+        public void onTaskComplete(Movie[] result) {
+            mMovieData = result;
+            showMovies(mMovieData);
         }
     }
     //endregion
