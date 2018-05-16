@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
     private RecyclerView mMovieList;
     private Movie[] mMovieData;
-    private String sortOrder = "popular";
+    private String appendPath = "popular";
 
 
     @Override
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList.setAdapter(mAdapter);
 
         //Build Search Query
-        URL movieSearchUrl = NetworkUtils.buildUrl(sortOrder);
+        URL movieSearchUrl = NetworkUtils.buildUrl(appendPath);
         //Run Query
         new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
 
@@ -68,12 +68,12 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     public boolean onOptionsItemSelected(MenuItem item) {
         int sortByClicked = item.getItemId();
         if (sortByClicked == R.id.popular) {
-            sortOrder = "popular";
-            makeMovieSearchQuery(sortOrder);
+            appendPath = "popular";
+            makeMovieSearchQuery(appendPath);
             setTitle("Popular Movies");
         } else if (sortByClicked == R.id.rating) {
-            sortOrder = "top_rated";
-            makeMovieSearchQuery(sortOrder);
+            appendPath = "top_rated";
+            makeMovieSearchQuery(appendPath);
             setTitle("Top Rated Movies");
         }
 

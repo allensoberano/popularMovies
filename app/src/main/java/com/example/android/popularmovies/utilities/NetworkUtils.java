@@ -33,7 +33,7 @@ public class NetworkUtils {
         //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendPath(appendPath)
+                .appendEncodedPath(appendPath)
                 .appendQueryParameter(PARAM_QUERY, API_KEY)
                 .build();
 

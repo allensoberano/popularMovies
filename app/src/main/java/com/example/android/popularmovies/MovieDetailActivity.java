@@ -2,15 +2,21 @@ package com.example.android.popularmovies;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.adapters.ReviewRVAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
+import com.example.android.popularmovies.async.ReviewQueryTask;
 import com.example.android.popularmovies.model.Movie;
+import com.example.android.popularmovies.model.Review;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,8 +26,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private Movie mMovieSent;
     private int mId;
-    private Movie[] mMovieData;
-    private MainActivity mainActivity;
+    private String appendPath;
+    private Review[] mReviewData;
+    private RecyclerView mReviewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +38,34 @@ public class MovieDetailActivity extends AppCompatActivity {
         mMovieSent = getIntent().getParcelableExtra("movie");
 
         mId = mMovieSent.getmId();
+        appendPath = mId + "/reviews";
+
+        ReviewRVAdapter mAdapter;
+
+        //Ref to RecyclerView from XML. Allows us to set the adapter of RV and toggle visibility.
+        mReviewList = findViewById(R.id.rv_reviews);
+        mReviewList.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new ReviewRVAdapter(this, mReviewData);
+        mReviewList.setHasFixedSize(true);
+        mReviewList.setAdapter(mAdapter);
+
+        //Build Search Query
+        URL movieSearchUrl = NetworkUtils.buildUrl(appendPath);
+        //Run Query
+        new ReviewQueryTask(new ReviewsCompleteListener()).execute(movieSearchUrl);
+
 
         populateDetailActivity(mMovieSent);
 
     }
 
     //region AsyncTask Listener
-    public class ReviewsTrailersCompleteListener implements AsyncTaskCompleteListener<Movie[]> {
+    public class ReviewsCompleteListener implements AsyncTaskCompleteListener<Review[]> {
 
         @Override
-        public void onTaskComplete(Movie[] result) {
-            mMovieData = result;
+        public void onTaskComplete(Review[] result) {
+            mReviewData = result;
+            showReviews(mReviewData);
             //showMovies(mMovieData);
         }
     }
@@ -83,6 +107,11 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         SimpleDateFormat fmtOut = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
         return fmtOut.format(date);
+    }
+
+    private void showReviews(Review[] review){
+        ReviewRVAdapter reviewRVAdapater = new ReviewRVAdapter(MovieDetailActivity.this, review);
+        reviewRVAdapater.notifyDataSetChanged();
     }
 
 }

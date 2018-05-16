@@ -1,6 +1,7 @@
 package com.example.android.popularmovies.utilities;
 
 import com.example.android.popularmovies.model.Movie;
+import com.example.android.popularmovies.model.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,9 +27,41 @@ public class JsonUtils {
         return movieArray;
     }
 
+    public static Review[] parseReviewJson(String json) throws JSONException {
+        JSONObject reviewDetails = new JSONObject(json);
+        JSONArray reviewResults = reviewDetails.getJSONArray("results");
+
+        Review[] reviewsArray = new Review[reviewResults.length()];
+
+        for (int i = 0; i < reviewResults.length(); i++){
+            JSONObject reviewData = reviewResults.getJSONObject(i);
+            reviewsArray[i] = createReviewObject(reviewData);
+        }
+
+        return reviewsArray;
+    }
+
+    private static Review createReviewObject(JSONObject reviewData){
+
+        final String REVIEW_ID = "id";
+        final String AUTHOR = "author";
+        final String CONTENT = "content";
+        final String URL_STRING = "url";
+
+        Review review = new Review();
+
+        review.setmId(reviewData.optString(REVIEW_ID));
+        review.setmAuthor(reviewData.optString(AUTHOR));
+        review.setmContent(reviewData.optString(CONTENT));
+        review.setmUrl(reviewData.optString(URL_STRING));
+
+        return review;
+
+
+    }
+
     private static Movie createMovieObject(JSONObject movieData){
         //Constants for the OptStrings for easier reference and updates
-        //final String MOVIE_RESULTS = "results";
         final String MOVIE_ID = "id";
         final String MOVIE_RATING = "rating";
         final String MOVIE_VOTE_AVG = "vote_average";

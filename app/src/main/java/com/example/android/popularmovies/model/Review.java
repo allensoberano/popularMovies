@@ -1,6 +1,13 @@
 package com.example.android.popularmovies.model;
 
 public class Review {
+
+    private String mId;
+    private String mAuthor;
+    private String mContent;
+    private String mUrl;
+
+
     public String getmId() {
         return mId;
     }
@@ -25,17 +32,14 @@ public class Review {
         this.mContent = mContent;
     }
 
-    public String getUrl() {
-        return url;
+    public String getmUrl() {
+        return mUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setmUrl(String mUrl) {
+        this.mUrl = mUrl;
     }
 
-    private String mId;
-    private String mAuthor;
-    private String mContent;
-    private String url;
+
 
 }
