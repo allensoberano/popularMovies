@@ -39,83 +39,102 @@
                 tools:text="Title Shows Here"
                 android:contentDescription="@string/content_movie_title"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingTop="3dp"
-            android:background="@color/white"
-            android:padding="10dp"
-            >
-
-            <RatingBar
-                android:id="@+id/rb_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize=".5"
-                android:layout_gravity="center"
-                android:contentDescription="@string/content_movie_rating"
-                />
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:paddingTop="3dp">
 
-                <TextView
+                <RatingBar
+                    android:id="@+id/rb_rating"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/release_date_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
-                    android:contentDescription="@string/content_release_date_label"/>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/content_movie_rating"
+                    android:numStars="5"
+                    android:stepSize=".5" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/content_release_date_label"
+                        android:text="@string/release_date_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_release_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/content_release_date"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        tools:text="Release Date Shows Here" />
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_release_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:text="Release Date Shows Here"
-                    android:contentDescription="@string/content_release_date"/>
+                    android:layout_marginTop="5dp"
+                    android:contentDescription="@string/content_movie_plot_label"
+                    android:text="@string/description_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/content_movie_plot"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    tools:text="Description Shows Here" />
+
+                <LinearLayout
+                    android:id="@+id/ll_recycler_visible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                <TextView
+                    android:id="@+id/tv_review_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:contentDescription="@string/content_reviews_label"
+                    android:padding="5dp"
+                    android:text="Reviews"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+                    android:textColor="@color/white" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
 
             </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/description_label"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp"
-                android:contentDescription="@string/content_movie_plot_label"/>
-
-            <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="Description Shows Here"
-                android:contentDescription="@string/content_movie_plot"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_reviews"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </android.support.v7.widget.RecyclerView>
-
-        </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

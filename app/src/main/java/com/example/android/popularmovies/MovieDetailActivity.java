@@ -66,7 +66,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         public void onTaskComplete(Review[] result) {
             mReviewData = result;
             showReviews(mReviewData);
-            //showMovies(mMovieData);
         }
     }
     //endregion
@@ -111,7 +110,15 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void showReviews(Review[] review){
         ReviewRVAdapter reviewRVAdapater = new ReviewRVAdapter(MovieDetailActivity.this, review);
+        mReviewList.setAdapter(reviewRVAdapater);
         reviewRVAdapater.notifyDataSetChanged();
+
+        //display number of reviews. So if there aren't any, it won't look like they are missing. Just shows "0 Reviews"
+        TextView mReviewLabel = findViewById(R.id.tv_review_label);
+        String reviewLabel = mReviewData.length + " Reviews";
+        mReviewLabel.setText(reviewLabel);
+
     }
+
 
 }

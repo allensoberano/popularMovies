@@ -48,16 +48,19 @@ public class ReviewRVAdapter extends RecyclerView.Adapter<ReviewRVAdapter.Review
 
     class ReviewViewHolder extends RecyclerView.ViewHolder{
         final TextView listItemTextView;
+        final TextView authorItemTextView;
 
         public ReviewViewHolder(View itemView) {
             super(itemView);
 
             listItemTextView = itemView.findViewById(R.id.tv_review);
+            authorItemTextView = itemView.findViewById(R.id.tv_author);
         }
 
         //convenience method
         void bind(int listIndex){
-            listItemTextView.setText(String.valueOf(listIndex));
+            listItemTextView.setText(String.valueOf(mReviews[listIndex].getmContent()));
+            authorItemTextView.setText(String.valueOf(mReviews[listIndex].getmAuthor()));
         }
 
     }
