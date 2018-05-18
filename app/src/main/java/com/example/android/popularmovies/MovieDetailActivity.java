@@ -2,6 +2,7 @@ package com.example.android.popularmovies;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -22,11 +23,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.support.v7.widget.RecyclerView.VERTICAL;
+
 public class MovieDetailActivity extends AppCompatActivity {
 
     private Movie mMovieSent;
     private int mId;
     private String appendPath;
+    private String newAppendPath;
     private Review[] mReviewData;
     private RecyclerView mReviewList;
 
@@ -38,7 +42,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         mMovieSent = getIntent().getParcelableExtra("movie");
 
         mId = mMovieSent.getmId();
-        appendPath = mId + "/reviews";
+        //appendPath = mId + "/reviews";
+        appendPath = "append_to_response";
+
 
         ReviewRVAdapter mAdapter;
 
@@ -50,7 +56,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         mReviewList.setAdapter(mAdapter);
 
         //Build Search Query
-        URL movieSearchUrl = NetworkUtils.buildUrl(appendPath);
+        URL movieSearchUrl = NetworkUtils.buildReviewsTrailersURL(mId, appendPath);
         //Run Query
         new ReviewQueryTask(new ReviewsCompleteListener()).execute(movieSearchUrl);
 
@@ -59,7 +65,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
-    //region AsyncTask Listener
+    //region AsyncTask Listener Reviews
     public class ReviewsCompleteListener implements AsyncTaskCompleteListener<Review[]> {
 
         @Override
@@ -111,12 +117,19 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void showReviews(Review[] review){
         ReviewRVAdapter reviewRVAdapater = new ReviewRVAdapter(MovieDetailActivity.this, review);
         mReviewList.setAdapter(reviewRVAdapater);
+        addDivider();
         reviewRVAdapater.notifyDataSetChanged();
 
         //display number of reviews. So if there aren't any, it won't look like they are missing. Just shows "0 Reviews"
         TextView mReviewLabel = findViewById(R.id.tv_review_label);
         String reviewLabel = mReviewData.length + " Reviews";
         mReviewLabel.setText(reviewLabel);
+
+    }
+
+    private void addDivider(){
+        DividerItemDecoration itemDecor = new DividerItemDecoration(mReviewList.getContext(), VERTICAL);
+        mReviewList.addItemDecoration(itemDecor);
 
     }
 

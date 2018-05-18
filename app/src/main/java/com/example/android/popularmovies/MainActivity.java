@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList.setAdapter(mAdapter);
 
         //Build Search Query
-        URL movieSearchUrl = NetworkUtils.buildUrl(appendPath);
+        URL movieSearchUrl = NetworkUtils.buildMoviesURL(appendPath);
         //Run Query
         new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
 

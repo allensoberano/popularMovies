@@ -7,7 +7,7 @@ public class MovieDBUtils {
     //creates movie search query string
     public static URL makeMovieSearchQuery(String appendPath) {
 
-        URL movieSearchUrl = NetworkUtils.buildUrl(appendPath);
+        URL movieSearchUrl = NetworkUtils.buildMoviesURL(appendPath);
         return movieSearchUrl;
 
     }

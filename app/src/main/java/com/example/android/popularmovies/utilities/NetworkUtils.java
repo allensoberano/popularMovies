@@ -29,12 +29,36 @@ public class NetworkUtils {
 
 
     //* Reference: Lesson 02_03
-    public static URL buildUrl(String appendPath){
+    public static URL buildMoviesURL(String appendPath, String movieID){
         //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                 .appendEncodedPath(appendPath)
                 .appendQueryParameter(PARAM_QUERY, API_KEY)
+                .build();
+
+        return uriToURL(builtUri);
+    }
+
+    //* Reference: Lesson 02_03
+    public static URL buildMoviesURL(String appendPath){
+        //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
+
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendEncodedPath(appendPath)
+                .appendQueryParameter(PARAM_QUERY, API_KEY)
+                .build();
+
+        return uriToURL(builtUri);
+    }
+
+    public static URL buildReviewsTrailersURL(int movieid, String appendPath){
+        //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
+
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendEncodedPath(String.valueOf(movieid))
+                .appendQueryParameter(PARAM_QUERY, API_KEY)
+                .appendQueryParameter("append_to_response", "videos,reviews")
                 .build();
 
         return uriToURL(builtUri);

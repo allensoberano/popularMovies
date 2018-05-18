@@ -28,13 +28,14 @@ public class JsonUtils {
     }
 
     public static Review[] parseReviewJson(String json) throws JSONException {
-        JSONObject reviewDetails = new JSONObject(json);
-        JSONArray reviewResults = reviewDetails.getJSONArray("results");
+        JSONObject allDetails = new JSONObject(json);
+        JSONObject reviewsObj = allDetails.getJSONObject("reviews");
+        JSONArray reviewResultsObj = reviewsObj.getJSONArray("results");
 
-        Review[] reviewsArray = new Review[reviewResults.length()];
+        Review[] reviewsArray = new Review[reviewResultsObj.length()];
 
-        for (int i = 0; i < reviewResults.length(); i++){
-            JSONObject reviewData = reviewResults.getJSONObject(i);
+        for (int i = 0; i < reviewResultsObj.length(); i++){
+            JSONObject reviewData = reviewResultsObj.getJSONObject(i);
             reviewsArray[i] = createReviewObject(reviewData);
         }
 
