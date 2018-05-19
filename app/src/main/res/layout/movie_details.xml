@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MovieDetailActivity">
 
     <ScrollView
@@ -13,71 +13,73 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical"
-            android:paddingTop="5dp"
-            android:background="@color/black"
-            >
+            android:paddingTop="5dp">
 
             <ImageView
                 android:id="@+id/iv_movie_image"
-                android:layout_width="225dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/content_movie_poster_image"
-                android:scaleType="fitCenter"
-                android:layout_gravity="center_horizontal" />
+                android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/tv_movie_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
+                android:contentDescription="@string/content_movie_title"
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/white"
-                tools:text="Title Shows Here"
-                android:contentDescription="@string/content_movie_title"/>
+                tools:text="Title Shows Here" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+            <RatingBar
+                android:id="@+id/rb_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/content_movie_rating"
+                android:numStars="5"
+                android:stepSize=".5" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp"
-                android:paddingTop="3dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
-                <RatingBar
-                    android:id="@+id/rb_rating"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/content_movie_rating"
-                    android:numStars="5"
-                    android:stepSize=".5" />
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/content_release_date_label"
+                    android:text="@string/release_date_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_release_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/content_release_date"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    tools:text="Release Date Shows Here" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:contentDescription="@string/content_release_date_label"
-                        android:text="@string/release_date_label"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_release_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:contentDescription="@string/content_release_date"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        tools:text="Release Date Shows Here" />
-
-                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -95,13 +97,14 @@
                     android:contentDescription="@string/content_movie_plot"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     tools:text="Description Shows Here" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_recycler_visible"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+            <LinearLayout
+                android:id="@+id/ll_recycler_visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tv_review_label"
                     android:layout_width="match_parent"
@@ -132,9 +135,8 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                 </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
-
             </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

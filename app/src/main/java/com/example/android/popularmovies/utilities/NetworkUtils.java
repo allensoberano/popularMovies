@@ -52,11 +52,11 @@ public class NetworkUtils {
         return uriToURL(builtUri);
     }
 
-    public static URL buildReviewsTrailersURL(int movieid, String appendPath){
+    public static URL buildReviewsTrailersURL(int movieId){
         //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendEncodedPath(String.valueOf(movieid))
+                .appendEncodedPath(String.valueOf(movieId))
                 .appendQueryParameter(PARAM_QUERY, API_KEY)
                 .appendQueryParameter("append_to_response", "videos,reviews")
                 .build();

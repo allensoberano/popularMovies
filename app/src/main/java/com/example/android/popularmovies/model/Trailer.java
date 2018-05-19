@@ -1,6 +1,6 @@
 package com.example.android.popularmovies.model;
 
-public class Video {
+public class Trailer {
     private String id;
     private String iso_639_1;
     private String key;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_movie_trailer_image"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_weight="50"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
+        android:padding="1dp"
+        android:contentDescription="@string/content_movie_poster_image"
+        android:background="@color/black"
+        />
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

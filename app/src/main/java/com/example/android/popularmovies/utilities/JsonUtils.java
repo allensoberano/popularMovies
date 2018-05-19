@@ -2,6 +2,7 @@ package com.example.android.popularmovies.utilities;
 
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.model.Review;
+import com.example.android.popularmovies.model.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,46 @@ public class JsonUtils {
 
         return movieArray;
     }
+
+    public static Trailer[] parseTrailerJson(String json) throws JSONException {
+        JSONObject allDetails = new JSONObject(json);
+        JSONObject trailersObj = allDetails.getJSONObject("videos");
+        JSONArray trailersResultsObj = trailersObj.getJSONArray("results");
+
+        Trailer[] trailersArray = new Trailer[trailersResultsObj.length()];
+
+        for (int i = 0; i <trailersResultsObj.length(); i++){
+            JSONObject trailerData = trailersResultsObj.getJSONObject(i);
+            trailersArray[i] = createTrailerObject(trailerData);
+        }
+
+        return trailersArray;
+    }
+
+    private static Trailer createTrailerObject(JSONObject trailerData){
+
+        final String TRAILER_ID = "id";
+        final String ISO = "iso_639_1";
+        final String KEY = "key";
+        final String NAME = "name";
+        final String SITE = "site";
+        final String SIZE = "size";
+        final String TYPE = "type";
+
+        Trailer trailer = new Trailer();
+
+        trailer.setId(trailerData.optString(TRAILER_ID));
+        trailer.setIso_639_1(trailerData.optString(ISO));
+        trailer.setKey(trailerData.optString(KEY));
+        trailer.setName(trailerData.optString(NAME));
+        trailer.setSite(trailerData.optString(SITE));
+        trailer.setSize(trailerData.optInt(SIZE));
+        trailer.setType(trailerData.optString(TYPE));
+
+        return trailer;
+    }
+
+
 
     public static Review[] parseReviewJson(String json) throws JSONException {
         JSONObject allDetails = new JSONObject(json);

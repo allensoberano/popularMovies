@@ -19,6 +19,8 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
 
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
 
+
+
     //Constructor
     public MovieRecyclerViewAdapter(Context context, Movie[] movies, ItemClickListener listener) {
 
