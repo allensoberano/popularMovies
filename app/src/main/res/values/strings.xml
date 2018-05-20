@@ -18,5 +18,5 @@
     <string name="content_movie_plot">Movie Plot</string>
     <string name="description_label">Description:</string>
     <string name="content_reviews_label">Reviews</string>
-    <string name="review_label_No_Reviews">No Written Reviews</string>
+    <string name="reviews_label">Reviews</string>
 </resources>

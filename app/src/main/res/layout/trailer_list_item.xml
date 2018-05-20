@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/colorAccent"
-    xmlns:tools="http://schemas.android.com/tools">
-
-
-
-
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_movie_trailer_image"
@@ -17,10 +10,6 @@
         android:scaleType="fitXY"
         android:padding="1dp"
         android:contentDescription="@string/content_movie_poster_image"
-        android:background="@color/black"
-        />
-
-
-
+        android:background="@color/black" />
 
 </android.support.constraint.ConstraintLayout>

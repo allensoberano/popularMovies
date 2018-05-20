@@ -122,7 +122,7 @@
                     android:background="@color/colorPrimaryDark"
                     android:contentDescription="@string/content_reviews_label"
                     android:padding="5dp"
-                    android:text="Reviews"
+                    android:text="@string/reviews_label"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
                     android:textColor="@color/white" />
 

@@ -12,7 +12,7 @@ import java.net.URL;
 public class TrailerQueryTask extends AsyncTask<URL, Void, Trailer[]> {
 
     private Trailer[] mTrailerData;
-    private AsyncTaskCompleteListener<Trailer[]> trailerListener;
+    private final AsyncTaskCompleteListener<Trailer[]> trailerListener;
 
     public TrailerQueryTask(MovieDetailActivity.TrailersCompleteListener listener){
        this.trailerListener = listener;

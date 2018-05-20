@@ -1,6 +1,5 @@
 package com.example.android.popularmovies.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.example.android.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
-    private final Context mContext;
     private final Movie[] mMovie;
     private final ItemClickListener mItemClickListener;
 
@@ -22,11 +20,10 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
 
 
     //Constructor
-    public MovieRecyclerViewAdapter(Context context, Movie[] movies, ItemClickListener listener) {
+    public MovieRecyclerViewAdapter(Movie[] movies, ItemClickListener listener) {
 
         //init member variables
         mMovie = movies;
-        mContext = context;
         mItemClickListener = listener;
 
     }
@@ -41,12 +38,12 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
         return new MovieViewHolder(view);
     }
 
-    //When Recyclerview wants to populate our view
+    //When RecyclerView wants to populate our view
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
 
         if (mMovie != null) {
-            Picasso.with(mContext)
+            Picasso.get()
                     .load(POSTER_PATH.concat(mMovie[position].getmPoster()))
                     .fit()
                     .into(holder.listItemImageView);

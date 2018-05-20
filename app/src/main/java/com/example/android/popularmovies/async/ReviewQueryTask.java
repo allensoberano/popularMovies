@@ -14,7 +14,7 @@ import java.net.URL;
 public class ReviewQueryTask extends AsyncTask<URL, Void, Review[]> {
 
     private Review[] mReviewData;
-    private AsyncTaskCompleteListener<Review[]> reviewListener;
+    private final AsyncTaskCompleteListener<Review[]> reviewListener;
 
     public ReviewQueryTask(MovieDetailActivity.ReviewsCompleteListener listener) {
         reviewListener = listener;

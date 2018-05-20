@@ -14,7 +14,7 @@ import java.net.URL;
 public class MovieQueryTask extends AsyncTask<URL, Void, Movie[]> {
 
     private Movie[] mMovieData;
-    private AsyncTaskCompleteListener<Movie[]> listener;
+    private final AsyncTaskCompleteListener<Movie[]> listener;
 
     public MovieQueryTask(MainActivity.MovieQueryTaskCompleteListener listener) {
         this.listener = listener;

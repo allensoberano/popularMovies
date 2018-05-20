@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         //Ref to RecyclerView from XML. Allows us to set the adapter of RV and toggle visibility.
         mMovieList = findViewById(R.id.rv_movies);
         mMovieList.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
-        mAdapter = new MovieRecyclerViewAdapter(this, mMovieData, this);
+        mAdapter = new MovieRecyclerViewAdapter(mMovieData, this);
         mMovieList.setHasFixedSize(true);
         mMovieList.setAdapter(mAdapter);
 
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
 
     //creates movie search query string
-    public void makeMovieSearchQuery(String appendPath) {
-
-
+    private void makeMovieSearchQuery(String appendPath) {
+        URL movieSearchUrl = NetworkUtils.buildMoviesURL(appendPath);
+        new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
 
     }
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     }
 
     private void showMovies(Movie[] movie){
-        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(MainActivity.this, movie, MainActivity.this);
+        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movie, MainActivity.this);
         mMovieList.setAdapter(movieRecyclerViewAdapter);
         movieRecyclerViewAdapter.notifyDataSetChanged();
     }

@@ -1,5 +1,7 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -30,10 +32,6 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class MovieDetailActivity extends AppCompatActivity implements TrailerRVAdapter.ItemClickListener {
 
-    private Movie mMovieSent;
-    private int mId;
-    private String appendPath;
-    private String newAppendPath;
     private Review[] mReviewData;
     private RecyclerView mReviewList;
     private Trailer[] mTrailerData;
@@ -44,9 +42,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
-        mMovieSent = getIntent().getParcelableExtra("movie");
-        mId = mMovieSent.getmId();
-        appendPath = "append_to_response";
+        Movie mMovieSent = getIntent().getParcelableExtra("movie");
+        int mId = mMovieSent.getmId();
 
         //Build Search Query
         URL movieSearchUrl = NetworkUtils.buildReviewsTrailersURL(mId);
@@ -56,7 +53,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         mTrailerList = findViewById(R.id.rv_trailers);
 
         mTrailerList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mTrailerAdapter = new TrailerRVAdapter(this, mTrailerData, this);
+        mTrailerAdapter = new TrailerRVAdapter(mTrailerData, this);
         mTrailerList.setHasFixedSize(true);
         mTrailerList.setAdapter(mTrailerAdapter);
 
@@ -69,7 +66,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         //Ref to RecyclerView from XML. Allows us to set the adapter of RV and toggle visibility.
         mReviewList = findViewById(R.id.rv_reviews);
         mReviewList.setLayoutManager(new LinearLayoutManager(this));
-        mReviewAdapter = new ReviewRVAdapter(this, mReviewData);
+        mReviewAdapter = new ReviewRVAdapter(mReviewData);
         mReviewList.setHasFixedSize(true);
         mReviewList.setAdapter(mReviewAdapter);
         //endregion
@@ -85,6 +82,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     @Override
     public void onItemClick(int position) {
         //put intent here
+        viewTrailerIntent(position);
+
     }
 
     //region AsyncTask Listener Reviews
@@ -126,7 +125,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
         String POSTER_PATH = NetworkUtils.posterURL();
 
-        Picasso.with(this)
+        Picasso.get()
                 .load(POSTER_PATH.concat(movieSent.getmPoster()))
                 .into(mMoviePoster);
 
@@ -148,30 +147,42 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     }
 
     private void showReviews(Review[] review){
-        ReviewRVAdapter reviewRVAdapater = new ReviewRVAdapter(MovieDetailActivity.this, review);
-        mReviewList.setAdapter(reviewRVAdapater);
+        ReviewRVAdapter reviewRVAdapter = new ReviewRVAdapter(review);
+        mReviewList.setAdapter(reviewRVAdapter);
         addDivider();
-        reviewRVAdapater.notifyDataSetChanged();
+        reviewRVAdapter.notifyDataSetChanged();
 
         //display number of reviews. So if there aren't any, it won't look like they are missing. Just shows "0 Reviews"
         TextView mReviewLabel = findViewById(R.id.tv_review_label);
-        String reviewLabel = mReviewData.length + " Reviews";
+        String reviewLabel = mReviewData.length + " " + R.string.reviews_label;
         mReviewLabel.setText(reviewLabel);
 
     }
 
     private void showTrailers(Trailer[] trailer){
-        TrailerRVAdapter trailerRVAdapter = new TrailerRVAdapter(MovieDetailActivity.this, trailer, MovieDetailActivity.this);
+        TrailerRVAdapter trailerRVAdapter = new TrailerRVAdapter(trailer, MovieDetailActivity.this);
         mTrailerList.setAdapter(trailerRVAdapter);
         trailerRVAdapter.notifyDataSetChanged();
 
     }
 
-
     private void addDivider(){
         DividerItemDecoration itemDecor = new DividerItemDecoration(mReviewList.getContext(), VERTICAL);
         mReviewList.addItemDecoration(itemDecor);
 
+    }
+
+    private void viewTrailerIntent(int position) {
+
+        String YOUTUBE_PACKAGE = "com.google.android.youtube";
+        String movieKey = mTrailerData[position].getKey();
+
+        URL youtubeURL = NetworkUtils.buildYoutubeURL(movieKey);
+        Intent trailerToView = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(youtubeURL)));
+        trailerToView.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        trailerToView.setPackage(YOUTUBE_PACKAGE);
+        startActivity(trailerToView);
     }
 
 

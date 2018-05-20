@@ -17,6 +17,8 @@ public class NetworkUtils {
     //* Reference: Lesson02_03 Exercise build URL
     private final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     private final static String PARAM_QUERY = "api_key";
+    private final static String YOUTUBE_BASE_URL = "https://www.youtube.com/watch";
+    private final static String YOUTUBE_PARAM_QUERY = "v";
     //final static String PRAM_SORT = "sort";
 
     //Will need to provide YOUR OWN API_Key
@@ -59,6 +61,14 @@ public class NetworkUtils {
                 .appendEncodedPath(String.valueOf(movieId))
                 .appendQueryParameter(PARAM_QUERY, API_KEY)
                 .appendQueryParameter("append_to_response", "videos,reviews")
+                .build();
+
+        return uriToURL(builtUri);
+    }
+
+    public static URL buildYoutubeURL(String movieKey){
+        Uri builtUri = Uri.parse(YOUTUBE_BASE_URL).buildUpon()
+                .appendQueryParameter(YOUTUBE_PARAM_QUERY, movieKey)
                 .build();
 
         return uriToURL(builtUri);

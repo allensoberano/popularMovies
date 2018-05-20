@@ -1,6 +1,5 @@
 package com.example.android.popularmovies.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +12,13 @@ import com.example.android.popularmovies.model.Review;
 public class ReviewRVAdapter extends RecyclerView.Adapter<ReviewRVAdapter.ReviewViewHolder>
 {
 
-    private final Context mContext;
     private final Review[] mReviews;
 
     //Constructor
-    public ReviewRVAdapter(Context context, Review[] reviews) {
+    public ReviewRVAdapter(Review[] reviews) {
 
         //init member variables
         mReviews = reviews;
-        mContext = context;
 
     }
 
