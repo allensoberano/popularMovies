@@ -1,6 +1,8 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +14,8 @@ import android.view.MenuItem;
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.MovieQueryTask;
+import com.example.android.popularmovies.data.MovieContract;
+import com.example.android.popularmovies.data.MovieDbHelper;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     private RecyclerView mMovieList;
     private Movie[] mMovieData;
     private String appendPath = "popular";
+    private SQLiteDatabase mDb;
 
 
     @Override
@@ -42,6 +47,14 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         URL movieSearchUrl = NetworkUtils.buildMoviesURL(appendPath);
         //Run Query
         new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
+
+        MovieDbHelper dbHelper = new MovieDbHelper(this);
+        mDb = dbHelper.getWritableDatabase();
+
+        Cursor cursor = getAllFavoriteMovies();
+        int a = 0;
+        //passing resulting cursor count to adapter
+        //mAdapter = new MovieRecyclerViewAdapter(this, cursor.getCount());
 
     }
 
@@ -75,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             appendPath = "top_rated";
             makeMovieSearchQuery(appendPath);
             setTitle("Top Rated Movies");
+        } else if (sortByClicked == R.id.favorites) {
+            getAllFavoriteMovies();
+            setTitle("Favorite Movies");
         }
 
         return super.onOptionsItemSelected(item);
@@ -116,6 +132,18 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra("movie", movieToSend);
         startActivity(intent);
+    }
+
+    private Cursor getAllFavoriteMovies(){
+        return mDb.query(
+                MovieContract.MoviesFavorites.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                MovieContract.MoviesFavorites.COLUMN_MOVIE_ID
+        );
     }
 }
 

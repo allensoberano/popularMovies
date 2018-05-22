@@ -14,6 +14,8 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
     private final Movie[] mMovie;
     private final ItemClickListener mItemClickListener;
 
+    private int mFavoriteMovieCount;
+
 
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
 
@@ -46,6 +48,8 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
             Picasso.get()
                     .load(POSTER_PATH.concat(mMovie[position].getmPoster()))
                     .fit()
+                    .placeholder(R.drawable.ic_local_movies_white_24dp)
+                    .error(R.drawable.ic_local_movies_white_24dp)
                     .into(holder.listItemImageView);
         }
     }
