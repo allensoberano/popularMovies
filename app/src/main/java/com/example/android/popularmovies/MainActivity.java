@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.MovieQueryTask;
-import com.example.android.popularmovies.data.MovieContract;
+import com.example.android.popularmovies.data.MovieContract.MoviesFavorites;
 import com.example.android.popularmovies.data.MovieDbHelper;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         MovieDbHelper dbHelper = new MovieDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
 
-        Cursor cursor = getAllFavoriteMovies();
-        int a = 0;
+
         //passing resulting cursor count to adapter
         //mAdapter = new MovieRecyclerViewAdapter(this, cursor.getCount());
 
@@ -134,16 +133,37 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         startActivity(intent);
     }
 
-    private Cursor getAllFavoriteMovies(){
-        return mDb.query(
-                MovieContract.MoviesFavorites.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                MovieContract.MoviesFavorites.COLUMN_MOVIE_ID
-        );
+    private Movie[] getAllFavoriteMovies(){
+        Cursor mCursor = mDb.rawQuery("SELECT * FROM " + MoviesFavorites.TABLE_NAME, null);
+        mMovieData = new Movie[mCursor.getCount()];
+
+        if (mCursor.moveToFirst()) {
+            do {
+                Movie movie = new Movie();
+
+
+                movie.setmId(mCursor.getInt(mCursor.getColumnIndex(MoviesFavorites.COLUMN_MOVIE_ID)));
+                movie.setmTitle(mCursor.getString(mCursor.getColumnIndex(MoviesFavorites.COLUMN_TITLE)));
+                movie.setmPoster(mCursor.getString(mCursor.getColumnIndex(MoviesFavorites.COLUMN_POSTER)));
+                movie.setmReleaseDate(mCursor.getString(mCursor.getColumnIndex(MoviesFavorites.COLUMN_RELEASE_DATE)));
+                movie.setmVoteAvg(mCursor.getInt(mCursor.getColumnIndex(MoviesFavorites.COLUMN_USER_RATING)));
+
+                mMovieData[mCursor.getPosition()] = movie;
+            }while (mCursor.moveToNext());
+
+//            mDb.query(
+//                    MovieContract.MoviesFavorites.TABLE_NAME,
+//                    null,
+//                    null,
+//                    null,
+//                    null,
+//                    null,
+//                    MovieContract.MoviesFavorites.COLUMN_MOVIE_ID
+//            );
+
+        }
+        showMovies(mMovieData);
+        return mMovieData;
     }
 }
 

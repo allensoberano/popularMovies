@@ -89,5 +89,6 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
                 mItemClickListener.onItemClick(getAdapterPosition());
 
         }
+
     }
 }

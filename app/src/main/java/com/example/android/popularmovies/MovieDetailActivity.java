@@ -1,12 +1,16 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -36,7 +40,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     private RecyclerView mReviewList;
     private Trailer[] mTrailerData;
     private RecyclerView mTrailerList;
-
+    private Boolean mFavorited = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +78,20 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         //Run Query
         new ReviewQueryTask(new ReviewsCompleteListener()).execute(movieSearchUrl);
 
-
         populateDetailActivity(mMovieSent);
 
+        //REFERENCE: Android Documentation: https://developer.android.com/guide/topics/ui/floating-action-button
+        final FloatingActionButton fab = findViewById(R.id.fab_fav);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setmFavorited(view, fab);
+            }
+        });
+
+
     }
+
 
     @Override
     public void onItemClick(int position) {
@@ -107,6 +121,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         }
     }
     //endregion
+
+
 
 
     //populates UI activity with data
@@ -159,16 +175,17 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
     }
 
+    private void addDivider(){
+        DividerItemDecoration itemDecor = new DividerItemDecoration(mReviewList.getContext(), VERTICAL);
+        mReviewList.addItemDecoration(itemDecor);
+
+    }
+
+    //region Trailers
     private void showTrailers(Trailer[] trailer){
         TrailerRVAdapter trailerRVAdapter = new TrailerRVAdapter(trailer, MovieDetailActivity.this);
         mTrailerList.setAdapter(trailerRVAdapter);
         trailerRVAdapter.notifyDataSetChanged();
-
-    }
-
-    private void addDivider(){
-        DividerItemDecoration itemDecor = new DividerItemDecoration(mReviewList.getContext(), VERTICAL);
-        mReviewList.addItemDecoration(itemDecor);
 
     }
 
@@ -184,6 +201,34 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         trailerToView.setPackage(YOUTUBE_PACKAGE);
         startActivity(trailerToView);
     }
+    //endregion
+
+    //region Floating Action Button
+    private void setmFavorited(View view, FloatingActionButton fab){
+        if (mFavorited){
+            mFavorited = false;
+            snackbarAlert(view,"Favorite Removed");
+            fabColor(fab);
+        } else {
+            mFavorited = true;
+            snackbarAlert(view,"Movie Favorited");
+            fabColor(fab);
+        }
+    }
+
+    private void fabColor(FloatingActionButton fab){
+        if (mFavorited){
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+        } else {
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
+        }
+    }
+
+    private void snackbarAlert(View view, String message){
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+                .setAction("Action", null).show();
+    }
+    //endregion
 
 
 }

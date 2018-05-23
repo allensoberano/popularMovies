@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,7 +23,10 @@
             android:orientation="vertical"
             >
 
+
+
             <LinearLayout
+                android:id="@+id/ll_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/black"
@@ -31,19 +41,24 @@
                 android:contentDescription="@string/content_movie_poster_image"
                 android:scaleType="fitCenter" />
 
+
             </LinearLayout>
+
 
             <TextView
                 android:id="@+id/tv_movie_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimary"
                 android:contentDescription="@string/content_movie_title"
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/white"
                 tools:text="Title Shows Here" />
+
+
+
 
 
             <android.support.v7.widget.RecyclerView
@@ -150,3 +165,21 @@
     </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/ic_favorite_black_24dp"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:fabSize="mini"
+        app:layout_anchor="@id/ll_image"
+        app:layout_anchorGravity="bottom|right|end" />
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
