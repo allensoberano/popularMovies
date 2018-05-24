@@ -173,7 +173,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="16dp"
         android:layout_marginTop="3dp"
-        android:src="@drawable/ic_favorite_black_24dp"
+        android:src="@drawable/ic_favorite_border_black_24dp"
         app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:layout_anchor="@id/ll_image"
