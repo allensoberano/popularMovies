@@ -1,6 +1,5 @@
 package com.example.android.popularmovies;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,8 +21,6 @@ import com.example.android.popularmovies.adapters.TrailerRVAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.ReviewQueryTask;
 import com.example.android.popularmovies.async.TrailerQueryTask;
-import com.example.android.popularmovies.data.MovieContract;
-import com.example.android.popularmovies.data.MovieContract.MoviesFavorites;
 import com.example.android.popularmovies.data.MovieDbHelper;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.model.Review;
@@ -87,11 +84,6 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         new ReviewQueryTask(new ReviewsCompleteListener()).execute(movieSearchUrl);
 
         populateDetailActivity(mMovieSent);
-        MovieDbHelper dbHelper = new MovieDbHelper(this);
-        mDb = dbHelper.getWritableDatabase();
-        //Cursor cursor = getAllFavoriteMovies();
-
-
 
         //REFERENCE: Android Documentation: https://developer.android.com/guide/topics/ui/floating-action-button
         final FloatingActionButton fab = findViewById(R.id.fab_fav);
@@ -102,8 +94,6 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
             }
         });
-
-
     }
 
 
@@ -135,8 +125,6 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         }
     }
     //endregion
-
-
 
 
     //populates UI activity with data
@@ -232,7 +220,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
             fab.setImageResource(R.drawable.ic_favorite_black_24dp);
             snackbarAlert(view,"Movie Favorited");
             fabColor(fab);
-            addMovie(mMovieSent);
+            MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
+            dbHelper.addMovie(mMovieSent);
         }
     }
 
@@ -250,19 +239,6 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     }
     //endregion
 
-
-
-    public long addMovie(Movie movie){
-
-        ContentValues cv = new ContentValues();
-        cv.put(MovieContract.MoviesFavorites.COLUMN_MOVIE_ID, movie.getmId());
-        cv.put(MovieContract.MoviesFavorites.COLUMN_POSTER, movie.getmPoster());
-        cv.put(MovieContract.MoviesFavorites.COLUMN_RELEASE_DATE, movie.getmReleaseDate());
-        cv.put(MovieContract.MoviesFavorites.COLUMN_TITLE, movie.getmTitle());
-        cv.put(MovieContract.MoviesFavorites.COLUMN_USER_RATING, movie.getmVoteAvg());
-
-        return mDb.insert(MoviesFavorites.TABLE_NAME, null, cv);
-    }
 
 
 }

@@ -1,7 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import android.view.MenuItem;
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.MovieQueryTask;
-import com.example.android.popularmovies.data.MovieContract.MoviesFavorites;
 import com.example.android.popularmovies.data.MovieDbHelper;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
@@ -48,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         //Run Query
         new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
 
-        MovieDbHelper dbHelper = new MovieDbHelper(this);
-        mDb = dbHelper.getWritableDatabase();
+//        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
+//        mDb = dbHelper.getWritableDatabase();
 
 
 
@@ -89,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             makeMovieSearchQuery(appendPath);
             setTitle("Top Rated Movies");
         } else if (sortByClicked == R.id.favorites) {
-            getAllFavoriteMovies();
+            getAllMovies();
             setTitle("Favorite Movies");
         }
 
@@ -134,27 +132,10 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         startActivity(intent);
     }
 
-    private Movie[] getAllFavoriteMovies(){
-        Cursor mCursor = mDb.rawQuery("SELECT * FROM " + MoviesFavorites.TABLE_NAME, null);
-        mMovieData = new Movie[mCursor.getCount()];
-
-        if (mCursor.moveToFirst()) {
-            do {
-                Movie movie = new Movie();
-
-                movie.setmId(mCursor.getInt(mCursor.getColumnIndex(MoviesFavorites.COLUMN_MOVIE_ID)));
-                movie.setmTitle(mCursor.getString(mCursor.getColumnIndex(MoviesFavorites.COLUMN_TITLE)));
-                movie.setmPoster(mCursor.getString(mCursor.getColumnIndex(MoviesFavorites.COLUMN_POSTER)));
-                movie.setmReleaseDate(mCursor.getString(mCursor.getColumnIndex(MoviesFavorites.COLUMN_RELEASE_DATE)));
-                movie.setmVoteAvg(mCursor.getInt(mCursor.getColumnIndex(MoviesFavorites.COLUMN_USER_RATING)));
-
-                mMovieData[mCursor.getPosition()] = movie;
-            }while (mCursor.moveToNext());
-
-
-        }
-        showMovies(mMovieData);
-        return mMovieData;
+    private void getAllMovies(){
+        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
+        dbHelper.getAllMovies();
     }
+
 }
 
