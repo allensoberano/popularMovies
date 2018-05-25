@@ -91,7 +91,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         //showMovies(mMovieData);
         return mMovieData;
     }
-    public void addMovie(Movie movie){
+    public void addFavoriteMovie(Movie movie){
         SQLiteDatabase mDb = getWritableDatabase();
         mDb.beginTransaction();
         try{
@@ -129,6 +129,24 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void removeFavorite(int movieId){
+        SQLiteDatabase mDb = getWritableDatabase();
+        mDb.beginTransaction();
+        try {
+            // Order of deletions is important when foreign key relationships exist.
+            mDb.delete(MoviesFavorites.TABLE_NAME,
+                    MoviesFavorites.COLUMN_MOVIE_ID + " = " + String.valueOf(movieId),
+                    null);
+            mDb.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TAG, "Error while removing favorites");
+        } finally {
+            mDb.endTransaction();
+        }
+    }
 
 
 }
+
+
+

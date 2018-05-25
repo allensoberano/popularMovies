@@ -137,8 +137,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         RatingBar mRating = findViewById(R.id.rb_rating);
         TextView mReleaseDate = findViewById(R.id.tv_release_date);
         TextView mDescription = findViewById(R.id.tv_description);
-
-
+        
         mMovieTitle.setText(movieSent.getmTitle());
         mRating.setRating(movieSent.getmVoteAvg()/2);
         mReleaseDate.setText(convertDate(movieSent.getmReleaseDate()));
@@ -214,12 +213,15 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
     //region Floating Action Button
     private void setmFavorited(View view, FloatingActionButton fab){
+        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
+
         if (mFavorited){
             //unfavorited
             mFavorited = false;
             fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             snackbarAlert(view,"Favorite Removed");
             fabColor(fab);
+            dbHelper.removeFavorite(mMovieSent.getmId());
 
         } else {
             //favorited
@@ -227,8 +229,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
             fab.setImageResource(R.drawable.ic_favorite_black_24dp);
             snackbarAlert(view,"Movie Favorited");
             fabColor(fab);
-            MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
-            dbHelper.addMovie(mMovieSent);
+            dbHelper.addFavoriteMovie(mMovieSent);
         }
     }
 
