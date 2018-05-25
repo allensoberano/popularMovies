@@ -134,7 +134,10 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
     private void getAllMovies(){
         MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
-        dbHelper.getAllMovies();
+        Movie[] movies = dbHelper.getAllMovies();
+        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movies, MainActivity.this);
+        mMovieList.setAdapter(movieRecyclerViewAdapter);
+        movieRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 }

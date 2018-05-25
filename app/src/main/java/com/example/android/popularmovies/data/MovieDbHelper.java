@@ -16,7 +16,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     private static MovieDbHelper sInstance;
 
     private static final String DATABASE_NAME = "movies.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     //Constructor that just calls parent constructor
     private MovieDbHelper(Context context){
@@ -29,7 +29,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         //SQL Query to create our table for the first time
         final String SQL_CREATE_MOVIE_FAVORITES_TABLE = "CREATE TABLE " + MoviesFavorites.TABLE_NAME + " (" +
                 MoviesFavorites._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MoviesFavorites.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
+                MoviesFavorites.COLUMN_MOVIE_ID + " INTEGER NOT NULL," +
                 MoviesFavorites.COLUMN_TITLE + " TEXT NOT NULL," +
                 MoviesFavorites.COLUMN_POSTER + " TEXT," +
                 MoviesFavorites.COLUMN_RELEASE_DATE + " TEXT," +
@@ -108,6 +108,24 @@ public class MovieDbHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Error while adding movie to favorites");
         } finally {
             mDb.endTransaction();
+        }
+    }
+
+    public boolean queryMovie(int movieID){
+        SQLiteDatabase mDb = getReadableDatabase();
+        Cursor mCursor = mDb.query(MoviesFavorites.TABLE_NAME,
+                null,
+                MoviesFavorites.COLUMN_MOVIE_ID + " = " + String.valueOf(movieID),
+                null,
+                null,
+                null,
+                null
+        );
+
+        if (mCursor.moveToFirst()) {
+            return true;
+            } else {
+            return false;
         }
     }
 

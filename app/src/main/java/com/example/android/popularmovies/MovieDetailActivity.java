@@ -46,6 +46,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     private Movie mMovieSent;
     private SQLiteDatabase mDb;
     private Movie[] mMovieData;
+    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
         mMovieSent = getIntent().getParcelableExtra("movie");
         int mId = mMovieSent.getmId();
+
+
 
         //Build Search Query
         URL movieSearchUrl = NetworkUtils.buildReviewsTrailersURL(mId);
@@ -83,10 +86,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         //Run Query
         new ReviewQueryTask(new ReviewsCompleteListener()).execute(movieSearchUrl);
 
-        populateDetailActivity(mMovieSent);
-
         //REFERENCE: Android Documentation: https://developer.android.com/guide/topics/ui/floating-action-button
-        final FloatingActionButton fab = findViewById(R.id.fab_fav);
+        fab = findViewById(R.id.fab_fav);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +95,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
             }
         });
+
+        populateDetailActivity(mMovieSent);
     }
 
 
@@ -146,6 +149,10 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         Picasso.get()
                 .load(POSTER_PATH.concat(movieSent.getmPoster()))
                 .into(mMoviePoster);
+
+        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
+        mFavorited = dbHelper.queryMovie(movieSent.getmId());
+        fabColor(fab);
 
     }
 
