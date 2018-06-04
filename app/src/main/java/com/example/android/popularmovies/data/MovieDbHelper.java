@@ -16,7 +16,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     private static MovieDbHelper sInstance;
 
     private static final String DATABASE_NAME = "movies.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
 
     //Constructor that just calls parent constructor
     private MovieDbHelper(Context context){

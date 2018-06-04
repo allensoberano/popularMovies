@@ -1,7 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +20,7 @@ import com.example.android.popularmovies.adapters.TrailerRVAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.ReviewQueryTask;
 import com.example.android.popularmovies.async.TrailerQueryTask;
-import com.example.android.popularmovies.data.MovieDbHelper;
+import com.example.android.popularmovies.data.AppDatabase;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.model.Review;
 import com.example.android.popularmovies.model.Trailer;
@@ -47,14 +46,21 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     private SQLiteDatabase mDb;
     private Movie[] mMovieData;
     private FloatingActionButton fab;
+
+    //Constant for default movie id to be used when not in update mode
+    private static final int DEFAULT_MOVIE_ID = -1;
+
+    private AppDatabase mDb2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
 
+
         mMovieSent = getIntent().getParcelableExtra("movie");
         int mId = mMovieSent.getmId();
-
+        mDb2 = AppDatabase.getsInstance(getApplicationContext());
 
 
         //Build Search Query
@@ -132,13 +138,15 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
     //populates UI activity with data
     private void populateDetailActivity(Movie movieSent){
+
+        getSupportActionBar().setTitle(movieSent.mTitle);
         ImageView mMoviePoster = findViewById(R.id.iv_movie_image);
-        TextView mMovieTitle = findViewById(R.id.tv_movie_title);
+       // TextView mMovieTitle = findViewById(R.id.tv_movie_title);
         RatingBar mRating = findViewById(R.id.rb_rating);
         TextView mReleaseDate = findViewById(R.id.tv_release_date);
         TextView mDescription = findViewById(R.id.tv_description);
         
-        mMovieTitle.setText(movieSent.getmTitle());
+        //mMovieTitle.setText(movieSent.getmTitle());
         mRating.setRating(movieSent.getmVoteAvg()/2);
         mReleaseDate.setText(convertDate(movieSent.getmReleaseDate()));
         mDescription.setText(movieSent.getmDescription());
@@ -149,11 +157,12 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
                 .load(POSTER_PATH.concat(movieSent.getmPoster()))
                 .into(mMoviePoster);
 
-        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
-        mFavorited = dbHelper.queryMovie(movieSent.getmId());
-        fabColor(fab);
+        mFavorited = checkFavorited();
+        fabImage();
 
     }
+
+
 
     //Converts the date to more familiar format
     //*Reference: Stack Overflow: https://stackoverflow.com/questions/9277747/android-simpledateformat-how-to-use-it
@@ -213,31 +222,28 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
     //region Floating Action Button
     private void setmFavorited(View view, FloatingActionButton fab){
-        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
+
 
         if (mFavorited){
             //unfavorited
             mFavorited = false;
-            fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            fabImage();
             snackbarAlert(view,"Favorite Removed");
-            fabColor(fab);
-            dbHelper.removeFavorite(mMovieSent.getmId());
-
+            removeMovie();
         } else {
             //favorited
             mFavorited = true;
-            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+            fabImage();
             snackbarAlert(view,"Movie Favorited");
-            fabColor(fab);
-            dbHelper.addFavoriteMovie(mMovieSent);
+            saveMovie();
         }
     }
 
-    private void fabColor(FloatingActionButton fab){
+    private void fabImage(){
         if (mFavorited){
-            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
         } else {
-            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
+            fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
     }
 
@@ -245,6 +251,47 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
     }
+
+
+    //endregion
+
+    //region Database
+    public Boolean checkFavorited(){
+        Movie movie = mDb2.movieDao().queryMovieById(mMovieSent.mId);
+        return movie != null;
+    }
+
+    public void saveMovie(){
+        int movieId = mMovieSent.getmId();
+        String title = mMovieSent.getmTitle();
+        String description = mMovieSent.getmDescription();
+        String poster = mMovieSent.getmPoster();
+        int rating = mMovieSent.getmRating();
+        String releaseDate = mMovieSent.getmReleaseDate();
+
+        //MovieEntry movieEntry = new MovieEntry(movieId, title, poster, releaseDate, rating, description);
+        Movie movie = new Movie(movieId, title, poster, releaseDate, rating, description);
+        mDb2.movieDao().insertMovie(movie);
+
+
+    }
+
+    public void removeMovie(){
+        int movieId = mMovieSent.getmId();
+        String title = mMovieSent.getmTitle();
+        String description = mMovieSent.getmDescription();
+        String poster = mMovieSent.getmPoster();
+        int rating = mMovieSent.getmRating();
+        String releaseDate = mMovieSent.getmReleaseDate();
+
+        //MovieEntry movieEntry = new MovieEntry(movieId, title, poster, releaseDate, rating, description);
+        Movie movie = new Movie(movieId, title, poster, releaseDate, rating, description);
+
+        mDb2.movieDao().deleteMovie(movie);
+
+    }
+
+
     //endregion
 
 

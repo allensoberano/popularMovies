@@ -14,6 +14,7 @@
     tools:context=".MovieDetailActivity">
 
     <ScrollView
+        android:id="@+id/main_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -41,25 +42,16 @@
                 android:contentDescription="@string/content_movie_poster_image"
                 android:scaleType="fitCenter" />
 
-
             </LinearLayout>
 
-
             <TextView
-                android:id="@+id/tv_movie_title"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:contentDescription="@string/content_movie_title"
+                android:text="Trailers"
                 android:gravity="center"
-                android:paddingBottom="5dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white"
-                tools:text="Title Shows Here" />
-
-
-
-
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_trailers"
@@ -171,13 +163,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginTop="3dp"
         android:src="@drawable/ic_favorite_border_black_24dp"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:fabSize="mini"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="normal"
         app:layout_anchor="@id/ll_image"
-        app:layout_anchorGravity="bottom|right|end" />
+        app:layout_anchorGravity="center|right|end" />
 
 
 

@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.MovieQueryTask;
-import com.example.android.popularmovies.data.MovieDbHelper;
+import com.example.android.popularmovies.data.AppDatabase;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     private Movie[] mMovieData;
     private String appendPath = "popular";
     private SQLiteDatabase mDb;
+    private MovieRecyclerViewAdapter mAdapter;
+    private AppDatabase mDb2;
+
+
 
 
     @Override
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MovieRecyclerViewAdapter mAdapter;
+        //MovieRecyclerViewAdapter mAdapter;
 
         //Ref to RecyclerView from XML. Allows us to set the adapter of RV and toggle visibility.
         mMovieList = findViewById(R.id.rv_movies);
@@ -49,10 +53,10 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 //        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
 //        mDb = dbHelper.getWritableDatabase();
 
-
-
         //passing resulting cursor count to adapter
         //mAdapter = new MovieRecyclerViewAdapter(this, cursor.getCount());
+
+        mDb2 = AppDatabase.getsInstance(getApplicationContext());
 
     }
 
@@ -133,12 +137,17 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     }
 
     private void getAllMovies(){
-        MovieDbHelper dbHelper = MovieDbHelper.getsInstance(this);
-        Movie[] movies = dbHelper.getAllMovies();
-        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movies, MainActivity.this);
+
+        mMovieData = mDb2.movieDao().loadAllMovies();
+         MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(mMovieData, MainActivity.this);
         mMovieList.setAdapter(movieRecyclerViewAdapter);
         movieRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //
+    }
 }
 

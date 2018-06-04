@@ -1,18 +1,62 @@
 package com.example.android.popularmovies.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 @SuppressWarnings({"unused", "SpellCheckingInspection"})
+@Entity(tableName = "favoriteMovies")
 public class Movie implements Parcelable {
 
-    private int mId;
-    private String mTitle;
-    private String mPoster;
-    private String mReleaseDate;
-    private int mRating;
-    private String mDescription;
+
+    @PrimaryKey(autoGenerate = false)
+    public int mId;
+    public String mTitle;
+    public String mPoster;
+    public String mReleaseDate;
+    public int mRating;
+    public String mDescription;
+
+    @Ignore
     private float mVoteAvg;
+
+
+    public Movie(int mId, String mTitle, String mPoster, String mReleaseDate, int mRating, String mDescription) {
+        this.mId = mId;
+        this.mTitle = mTitle;
+        this.mPoster = mPoster;
+        this.mReleaseDate = mReleaseDate;
+        this.mRating = mRating;
+        this.mDescription = mDescription;
+    }
+
+//    public Movie(int _id, int mId, String mTitle, String mPoster, String mReleaseDate, int mRating, String mDescription) {
+//        this._id = _id;
+//        this.mId = mId;
+//        this.mTitle = mTitle;
+//        this.mPoster = mPoster;
+//        this.mReleaseDate = mReleaseDate;
+//        this.mRating = mRating;
+//        this.mDescription = mDescription;
+//    }
+
+    //Constructor
+    @Ignore
+    //just a test
+    public Movie() {
+
+    }
+
+
+//    public int get_id() {
+//        return _id;
+//    }
+//
+//    public void set_id(int _id) {
+//        this._id = _id;
+//    }
 
     public int getmId() {
         return mId;
@@ -52,13 +96,6 @@ public class Movie implements Parcelable {
         this.mRating = mRating;
     }
 
-    public float getmVoteAvg() {
-        return mVoteAvg;
-    }
-
-    public void setmVoteAvg(float mVoteAvg) {
-        this.mVoteAvg = mVoteAvg;
-    }
 
     public String getmDescription() {
         return mDescription;
@@ -68,6 +105,14 @@ public class Movie implements Parcelable {
         this.mDescription = mDescription;
     }
 
+    public float getmVoteAvg() {
+        return mVoteAvg;
+    }
+
+    public void setmVoteAvg(float mVoteAvg) {
+        this.mVoteAvg = mVoteAvg;
+    }
+
 
     //region Parcelable
     @Override
@@ -75,10 +120,7 @@ public class Movie implements Parcelable {
         return 0;
     }
 
-    //Constructor
-    public Movie() {
-
-    }
+  
 
     //Constructor
     //Using 'in' variable, we retrieve the values we originally wrote into the Parcel.
