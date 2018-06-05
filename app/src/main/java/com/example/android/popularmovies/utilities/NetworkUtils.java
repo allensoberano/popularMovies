@@ -31,18 +31,6 @@ public class NetworkUtils {
 
 
     //* Reference: Lesson 02_03
-    public static URL buildMoviesURL(String appendPath, String movieID){
-        //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
-
-        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendEncodedPath(appendPath)
-                .appendQueryParameter(PARAM_QUERY, API_KEY)
-                .build();
-
-        return uriToURL(builtUri);
-    }
-
-    //* Reference: Lesson 02_03
     public static URL buildMoviesURL(String appendPath){
         //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 

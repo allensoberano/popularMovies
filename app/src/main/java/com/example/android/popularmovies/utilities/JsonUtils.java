@@ -85,17 +85,13 @@ public class JsonUtils {
 
     private static Review createReviewObject(JSONObject reviewData){
 
-        final String REVIEW_ID = "id";
         final String AUTHOR = "author";
         final String CONTENT = "content";
-        final String URL_STRING = "url";
 
         Review review = new Review();
 
-        review.setmId(reviewData.optString(REVIEW_ID));
         review.setmAuthor(reviewData.optString(AUTHOR));
         review.setmContent(reviewData.optString(CONTENT));
-        review.setmUrl(reviewData.optString(URL_STRING));
 
         return review;
 

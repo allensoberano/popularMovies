@@ -14,8 +14,6 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
     private final Movie[] mMovie;
     private final ItemClickListener mItemClickListener;
 
-    private int mFavoriteMovieCount;
-
 
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
 

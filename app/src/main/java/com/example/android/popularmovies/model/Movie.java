@@ -11,7 +11,7 @@ import android.os.Parcelable;
 public class Movie implements Parcelable {
 
 
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     public int mId;
     public String mTitle;
     public String mPoster;
@@ -32,31 +32,12 @@ public class Movie implements Parcelable {
         this.mDescription = mDescription;
     }
 
-//    public Movie(int _id, int mId, String mTitle, String mPoster, String mReleaseDate, int mRating, String mDescription) {
-//        this._id = _id;
-//        this.mId = mId;
-//        this.mTitle = mTitle;
-//        this.mPoster = mPoster;
-//        this.mReleaseDate = mReleaseDate;
-//        this.mRating = mRating;
-//        this.mDescription = mDescription;
-//    }
-
     //Constructor
     @Ignore
-    //just a test
     public Movie() {
 
     }
 
-
-//    public int get_id() {
-//        return _id;
-//    }
-//
-//    public void set_id(int _id) {
-//        this._id = _id;
-//    }
 
     public int getmId() {
         return mId;

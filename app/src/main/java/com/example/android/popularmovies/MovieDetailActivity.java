@@ -1,7 +1,6 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -21,6 +21,7 @@ import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.ReviewQueryTask;
 import com.example.android.popularmovies.async.TrailerQueryTask;
 import com.example.android.popularmovies.data.AppDatabase;
+import com.example.android.popularmovies.data.AppExecutors;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.model.Review;
 import com.example.android.popularmovies.model.Trailer;
@@ -35,7 +36,10 @@ import java.util.Locale;
 
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
+@SuppressWarnings("ALL")
 public class MovieDetailActivity extends AppCompatActivity implements TrailerRVAdapter.ItemClickListener {
+
+    private static final String TAG = MovieDetailActivity.class.getSimpleName();
 
     private Review[] mReviewData;
     private RecyclerView mReviewList;
@@ -43,12 +47,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     private RecyclerView mTrailerList;
     private Boolean mFavorited = false;
     private Movie mMovieSent;
-    private SQLiteDatabase mDb;
-    private Movie[] mMovieData;
     private FloatingActionButton fab;
-
-    //Constant for default movie id to be used when not in update mode
-    private static final int DEFAULT_MOVIE_ID = -1;
 
     private AppDatabase mDb2;
 
@@ -61,7 +60,6 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         mMovieSent = getIntent().getParcelableExtra("movie");
         int mId = mMovieSent.getmId();
         mDb2 = AppDatabase.getsInstance(getApplicationContext());
-
 
         //Build Search Query
         URL movieSearchUrl = NetworkUtils.buildReviewsTrailersURL(mId);
@@ -97,7 +95,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setmFavorited(view, fab);
+                setmFavorited(view);
 
             }
         });
@@ -138,8 +136,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
     //populates UI activity with data
     private void populateDetailActivity(Movie movieSent){
+        setTitleActionBar(movieSent);
 
-        getSupportActionBar().setTitle(movieSent.mTitle);
         ImageView mMoviePoster = findViewById(R.id.iv_movie_image);
        // TextView mMovieTitle = findViewById(R.id.tv_movie_title);
         RatingBar mRating = findViewById(R.id.rb_rating);
@@ -157,11 +155,14 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
                 .load(POSTER_PATH.concat(movieSent.getmPoster()))
                 .into(mMoviePoster);
 
-        mFavorited = checkFavorited();
-        fabImage();
-
+        checkFavorited();
     }
 
+    private void setTitleActionBar(Movie movieSent) {
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(movieSent.mTitle);
+        }
+    }
 
 
     //Converts the date to more familiar format
@@ -221,7 +222,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     //endregion
 
     //region Floating Action Button
-    private void setmFavorited(View view, FloatingActionButton fab){
+    private void setmFavorited(View view){
 
 
         if (mFavorited){
@@ -256,12 +257,49 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     //endregion
 
     //region Database
-    public Boolean checkFavorited(){
-        Movie movie = mDb2.movieDao().queryMovieById(mMovieSent.mId);
-        return movie != null;
+    private void checkFavorited(){
+
+        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "Actively query movies from database");
+                Movie movie = mDb2.movieDao().queryMovieById(mMovieSent.mId);
+                mFavorited = movie != null;
+
+                //Simplify later
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fabImage();
+                    }
+                });
+            }
+        });
+
     }
 
-    public void saveMovie(){
+    private void saveMovie(){
+        int movieId = mMovieSent.getmId();
+        String title = mMovieSent.getmTitle();
+        String description = mMovieSent.getmDescription();
+        String poster = mMovieSent.getmPoster();
+        int rating = mMovieSent.getmRating();
+        String releaseDate = mMovieSent.getmReleaseDate();
+
+        final Movie movie = new Movie(movieId, title, poster, releaseDate, rating, description);
+        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "Actively query movies from database");
+                mDb2.movieDao().insertMovie(movie);
+            }
+        });
+
+
+
+    }
+
+    private void removeMovie(){
         int movieId = mMovieSent.getmId();
         String title = mMovieSent.getmTitle();
         String description = mMovieSent.getmDescription();
@@ -270,24 +308,15 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         String releaseDate = mMovieSent.getmReleaseDate();
 
         //MovieEntry movieEntry = new MovieEntry(movieId, title, poster, releaseDate, rating, description);
-        Movie movie = new Movie(movieId, title, poster, releaseDate, rating, description);
-        mDb2.movieDao().insertMovie(movie);
+        final Movie movie = new Movie(movieId, title, poster, releaseDate, rating, description);
 
+        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb2.movieDao().deleteMovie(movie);
+            }
+        });
 
-    }
-
-    public void removeMovie(){
-        int movieId = mMovieSent.getmId();
-        String title = mMovieSent.getmTitle();
-        String description = mMovieSent.getmDescription();
-        String poster = mMovieSent.getmPoster();
-        int rating = mMovieSent.getmRating();
-        String releaseDate = mMovieSent.getmReleaseDate();
-
-        //MovieEntry movieEntry = new MovieEntry(movieId, title, poster, releaseDate, rating, description);
-        Movie movie = new Movie(movieId, title, poster, releaseDate, rating, description);
-
-        mDb2.movieDao().deleteMovie(movie);
 
     }
 

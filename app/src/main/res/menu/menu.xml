@@ -20,7 +20,7 @@
             <item
                 android:id="@+id/favorites"
                 android:orderInCategory="1"
-                android:title="Favorites"
+                android:title="@string/favorites"
                 app:showAsAction="ifRoom" />
         </menu>
     </item>

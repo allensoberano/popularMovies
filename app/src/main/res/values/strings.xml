@@ -7,8 +7,6 @@
 
     <string name="content_movie_poster_image">Movie Poster Image</string>
 
-    <string name="content_movie_title">Movie Title</string>
-
     <string name="content_movie_rating">Movie Rating</string>
 
     <string name="content_release_date_label">Release Date Label</string>
@@ -19,4 +17,6 @@
     <string name="description_label">Description:</string>
     <string name="content_reviews_label">Reviews</string>
     <string name="reviews_label">Reviews</string>
+    <string name="trailers">Trailers</string>
+    <string name="favorites">Favorites</string>
 </resources>

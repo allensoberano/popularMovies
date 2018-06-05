@@ -47,7 +47,7 @@ public class ReviewRVAdapter extends RecyclerView.Adapter<ReviewRVAdapter.Review
         final TextView listItemTextView;
         final TextView authorItemTextView;
 
-        public ReviewViewHolder(View itemView) {
+        ReviewViewHolder(View itemView) {
             super(itemView);
 
             listItemTextView = itemView.findViewById(R.id.tv_review);
