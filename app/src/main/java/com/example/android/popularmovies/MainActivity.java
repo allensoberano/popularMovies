@@ -2,6 +2,7 @@ package com.example.android.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     private Movie[] mMovieData;
     private String appendPath = "popular";
     private AppDatabase mDb2;
+    public final static String LIST_STATE_KEY = "rv_state";
+    Parcelable rvState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,32 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         int nColumns = width / widthDivider;
         if (nColumns < 2) return 2;
         return nColumns;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save list state
+        rvState = mMovieList.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(LIST_STATE_KEY, rvState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+
+        //Retrieve previous state
+        if(savedInstanceState != null)
+            rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (rvState != null)
+            mMovieList.getLayoutManager().onRestoreInstanceState(rvState);
     }
 
     //region Menu
