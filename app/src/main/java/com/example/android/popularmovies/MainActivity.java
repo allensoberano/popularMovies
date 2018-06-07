@@ -163,10 +163,10 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     //endregion
 
     private void launchMovieDetailActivity(int position) {
-        Movie movieToSend = this.mMovieData.get(position);//new Movie();
-        Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra("movie", movieToSend);
-        startActivity(intent);
+            Movie movieToSend = this.mMovieData.get(position);//new Movie();
+            Intent intent = new Intent(this, MovieDetailActivity.class);
+            intent.putExtra("movie", movieToSend);
+            startActivity(intent);
     }
 
     private void getAllMovies() {
@@ -175,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             @Override
             public void run() {
                 Log.d(TAG, "Actively retrieving movies from database");
-                final List<Movie> movies = mDb.movieDao().loadAllMovies();
-                mMovieData = movies;
+                mMovieData = mDb.movieDao().loadAllMovies();
+
 
                 //simplify this later
                 runOnUiThread(new Runnable() {
