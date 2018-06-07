@@ -8,21 +8,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JsonUtils {
 
 
-    public static Movie[] parseMovieJson(String json) throws JSONException {
+    private List<Movie> movieArray;
+
+    public static List<Movie> parseMovieJson(String json) throws JSONException {
 
         JSONObject movieDetails = new JSONObject(json);
         JSONArray moviesResults = movieDetails.getJSONArray("results");
 
-        Movie[] movieArray = new Movie[moviesResults.length()];
+        //Movie[] movieArray = new Movie[moviesResults.length()];
+        List<Movie> movieArray = new ArrayList<>();
+
 
         //loop through results array, create movie object and return in MovieArray
         for (int i = 0; i <moviesResults.length(); i++){
 
             JSONObject movieData = moviesResults.getJSONObject(i);
-            movieArray[i] = createMovieObject(movieData);
+            movieArray.add(createMovieObject(movieData));
+            //movieArray[i] = createMovieObject(movieData);
         }
 
         return movieArray;

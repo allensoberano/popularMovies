@@ -55,11 +55,11 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
-
+        mDb2 = AppDatabase.getsInstance(getApplicationContext());
 
         mMovieSent = getIntent().getParcelableExtra("movie");
         int mId = mMovieSent.getmId();
-        mDb2 = AppDatabase.getsInstance(getApplicationContext());
+
 
         //Build Search Query
         URL movieSearchUrl = NetworkUtils.buildReviewsTrailersURL(mId);

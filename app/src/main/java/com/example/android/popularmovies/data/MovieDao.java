@@ -8,12 +8,14 @@ import android.arch.persistence.room.Query;
 
 import com.example.android.popularmovies.model.Movie;
 
+import java.util.List;
+
 @Dao
 public interface MovieDao {
 
     @Query("SELECT * FROM favoriteMovies ORDER BY mReleaseDate")
-    //List<MovieEntry> loadAllMovies();
-    Movie[] loadAllMovies();
+    List<Movie> loadAllMovies();
+    //Movie[] loadAllMovies();
 
     @Query("SELECT * FROM favoriteMovies WHERE mId LIKE :mId")
     Movie queryMovieById(int mId);

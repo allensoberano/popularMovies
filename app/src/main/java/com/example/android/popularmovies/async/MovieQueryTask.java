@@ -8,20 +8,21 @@ import com.example.android.popularmovies.utilities.JsonUtils;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import java.net.URL;
+import java.util.List;
 
 //EXTRACT AsyncTask
 
-public class MovieQueryTask extends AsyncTask<URL, Void, Movie[]> {
+public class MovieQueryTask extends AsyncTask<URL, Void, List<Movie>> {
 
-    private Movie[] mMovieData;
-    private final AsyncTaskCompleteListener<Movie[]> listener;
+    private List<Movie> mMovieData;
+    private final AsyncTaskCompleteListener<List<Movie>> listener;
 
     public MovieQueryTask(MainActivity.MovieQueryTaskCompleteListener listener) {
         this.listener = listener;
     }
 
     @Override
-    protected Movie[] doInBackground(URL... urls) {
+    protected List<Movie> doInBackground(URL... urls) {
         URL searchUrl = urls[0];
         String movieSearchResults;
         try {
@@ -34,7 +35,7 @@ public class MovieQueryTask extends AsyncTask<URL, Void, Movie[]> {
     }
 
     @Override
-    protected void onPostExecute(Movie[] movie) {
+    protected void onPostExecute(List<Movie> movie) {
 
         listener.onTaskComplete(mMovieData);
 

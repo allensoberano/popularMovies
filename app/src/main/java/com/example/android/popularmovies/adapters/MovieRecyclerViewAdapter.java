@@ -10,8 +10,11 @@ import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
-    private final Movie[] mMovie;
+    //private final Movie[] mMovie;
+    private final List<Movie> mMovie;
     private final ItemClickListener mItemClickListener;
 
 
@@ -20,7 +23,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
 
 
     //Constructor
-    public MovieRecyclerViewAdapter(Movie[] movies, ItemClickListener listener) {
+    public MovieRecyclerViewAdapter(List movies, ItemClickListener listener) {
 
         //init member variables
         mMovie = movies;
@@ -44,7 +47,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
 
         if (mMovie != null) {
             Picasso.get()
-                    .load(POSTER_PATH.concat(mMovie[position].getmPoster()))
+                    .load(POSTER_PATH.concat(mMovie.get(position).getmPoster()))
                     .fit()
                     .placeholder(R.drawable.ic_local_movies_white_24dp)
                     .error(R.drawable.ic_local_movies_white_24dp)
@@ -60,7 +63,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
         if (mMovie == null) {
             return 20;
         } else {
-            return mMovie.length;
+            return mMovie.size();
         }
     }
 

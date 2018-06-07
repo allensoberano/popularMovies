@@ -20,14 +20,15 @@ import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieRecyclerViewAdapter.ItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView mMovieList;
-    private Movie[] mMovieData;
+    private List<Movie> mMovieData;
     private String appendPath = "popular";
-    private AppDatabase mDb2;
+    private AppDatabase mDb;
     public final static String LIST_STATE_KEY = "rv_state";
     Parcelable rvState;
 
@@ -43,12 +44,15 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList.setHasFixedSize(true);
         mMovieList.setAdapter(mAdapter);
 
+        if(savedInstanceState != null)
+            rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+
         //Build Search Query
         URL movieSearchUrl = NetworkUtils.buildMoviesURL(appendPath);
         //Run Query
         new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
 
-        mDb2 = AppDatabase.getsInstance(getApplicationContext());
+        mDb = AppDatabase.getsInstance(getApplicationContext());
 
     }
 
@@ -66,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        //outState.putParcelableArray(LIST_STATE_KEY, mMovieData);
+
         // save list state
         rvState = mMovieList.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(LIST_STATE_KEY, rvState);
@@ -74,19 +81,21 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
+        //mMovieData = (Arr) savedInstanceState.getParcelableArray(LIST_STATE_KEY);
 
         //Retrieve previous state
         if(savedInstanceState != null)
             rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-        super.onRestoreInstanceState(savedInstanceState);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (rvState != null)
-            mMovieList.getLayoutManager().onRestoreInstanceState(rvState);
+           mMovieList.getLayoutManager().onRestoreInstanceState(rvState);
     }
 
     //region Menu
@@ -134,25 +143,27 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         launchMovieDetailActivity(position);
     }
 
-    private void showMovies(Movie[] movie) {
+    private void showMovies(List<Movie> movie) {
         MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movie, MainActivity.this);
         mMovieList.setAdapter(movieRecyclerViewAdapter);
         movieRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     //region AsyncTask Listener
-    public class MovieQueryTaskCompleteListener implements AsyncTaskCompleteListener<Movie[]> {
+    public class MovieQueryTaskCompleteListener implements AsyncTaskCompleteListener<List<Movie>> {
 
         @Override
-        public void onTaskComplete(Movie[] result) {
+        public void onTaskComplete(List<Movie> result) {
             mMovieData = result;
             showMovies(mMovieData);
         }
+
+
     }
     //endregion
 
     private void launchMovieDetailActivity(int position) {
-        Movie movieToSend = this.mMovieData[position];//new Movie();
+        Movie movieToSend = this.mMovieData.get(position);//new Movie();
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra("movie", movieToSend);
         startActivity(intent);
@@ -164,7 +175,8 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             @Override
             public void run() {
                 Log.d(TAG, "Actively retrieving movies from database");
-                mMovieData = mDb2.movieDao().loadAllMovies();
+                final List<Movie> movies = mDb.movieDao().loadAllMovies();
+                mMovieData = movies;
 
                 //simplify this later
                 runOnUiThread(new Runnable() {
