@@ -1,8 +1,11 @@
 package com.example.android.popularmovies;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +18,6 @@ import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.MovieQueryTask;
 import com.example.android.popularmovies.data.AppDatabase;
-import com.example.android.popularmovies.data.AppExecutors;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
@@ -30,13 +32,43 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     private String appendPath = "popular";
     private AppDatabase mDb;
     public final static String LIST_STATE_KEY = "rv_state";
+    public final static String LAST_SCREEN = "last_screen";
     Parcelable rvState;
+    private String mLastScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //setupPopularMovies();
+        mMovieList = findViewById(R.id.rv_movies);
+        mMovieList.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
+        if(savedInstanceState != null) {
+            rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            mLastScreen = savedInstanceState.getString(LAST_SCREEN);
+
+            switch (mLastScreen){
+                case "Popular Movies":
+                    setupPopularMovies();
+                case "Top Rated":
+                    //go to top rated
+                case "Favorite Movies":
+                    mDb = AppDatabase.getsInstance(getApplicationContext());
+                    getAllMovies();
+            }
+        } else {
+            mDb = AppDatabase.getsInstance(getApplicationContext());
+            getAllMovies();
+            setupPopularMovies();
+
+        }
+
+
+
+    }
+
+    private void setupPopularMovies() {
         //Ref to RecyclerView from XML. Allows us to set the adapter of RV and toggle visibility.
         mMovieList = findViewById(R.id.rv_movies);
         mMovieList.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
@@ -44,16 +76,10 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList.setHasFixedSize(true);
         mMovieList.setAdapter(mAdapter);
 
-        if(savedInstanceState != null)
-            rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-
         //Build Search Query
         URL movieSearchUrl = NetworkUtils.buildMoviesURL(appendPath);
         //Run Query
         new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
-
-        mDb = AppDatabase.getsInstance(getApplicationContext());
-
     }
 
     private int numberOfColumns() {
@@ -76,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         // save list state
         rvState = mMovieList.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(LIST_STATE_KEY, rvState);
+        outState.putString(LAST_SCREEN, String.valueOf(getTitle()));
 
     }
 
@@ -158,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             showMovies(mMovieData);
         }
 
-
     }
     //endregion
 
@@ -171,26 +197,21 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
     private void getAllMovies() {
 
-        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
+
                 Log.d(TAG, "Actively retrieving movies from database");
-                mMovieData = mDb.movieDao().loadAllMovies();
+                final LiveData<List<Movie>> mMovieData2 = mDb.movieDao().loadAllMovies();
 
-
-                //simplify this later
-                runOnUiThread(new Runnable() {
+                mMovieData2.observe(MainActivity.this, new Observer<List<Movie>>() {
                     @Override
-                    public void run() {
-                        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(mMovieData, MainActivity.this);
+                    public void onChanged(@Nullable List<Movie> movies) {
+                        Log.d(TAG, "Receiving database update from LiveData");
+                        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movies, MainActivity.this);
                         mMovieList.setAdapter(movieRecyclerViewAdapter);
                         movieRecyclerViewAdapter.notifyDataSetChanged();
+                        setTitle("Favorite Movies");
+
                     }
                 });
-
-            }
-        });
-
     }
 }
 
