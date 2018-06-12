@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -31,11 +32,15 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     private RecyclerView mMovieList;
     private List<Movie> mMovieData;
     private String appendPath = "popular";
-    private AppDatabase mDb;
     public final static String LIST_STATE_KEY = "rv_state";
     public final static String LAST_SCREEN = "last_screen";
     Parcelable rvState;
     private String mLastScreen;
+
+    //CONSTANTS
+    private final static String POPULAR_MOVIES = "Popular Movies";
+    private final static String TOP_RATED_MOVIES = "Top Rated Movies";
+    private final static String FAVORITE_MOVIES = "Favorite Movies";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +50,27 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList = findViewById(R.id.rv_movies);
         mMovieList.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
+        AppDatabase mDb;
         if(savedInstanceState != null) {
             rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
             mLastScreen = savedInstanceState.getString(LAST_SCREEN);
 
             switch (mLastScreen){
-                case "Popular Movies":
+                case POPULAR_MOVIES:
                     setupPopularMovies();
-                case "Top Rated Movies":
+                    setTitle(POPULAR_MOVIES);
+                    break;
+                case TOP_RATED_MOVIES:
                     setupPopularMovies();
                     appendPath = "top_rated";
                     makeMovieSearchQuery(appendPath);
-                    setTitle("Top Rated Movies");
-                case "Favorite Movies":
+                    setTitle(TOP_RATED_MOVIES);
+                    break;
+                case FAVORITE_MOVIES:
                     mDb = AppDatabase.getsInstance(getApplicationContext());
                     getAllMovies();
+                    setTitle(FAVORITE_MOVIES);
+                    break;
             }
         } else {
             mDb = AppDatabase.getsInstance(getApplicationContext());
@@ -141,18 +152,16 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         int sortByClicked = item.getItemId();
         switch (sortByClicked) {
             case R.id.popular:
-                appendPath = "popular";
-                makeMovieSearchQuery(appendPath);
-                setTitle("Popular Movies");
+                makeMovieSearchQuery("popular");
+                setTitle(POPULAR_MOVIES);
                 break;
             case R.id.rating:
-                appendPath = "top_rated";
-                makeMovieSearchQuery(appendPath);
-                setTitle("Top Rated Movies");
+                makeMovieSearchQuery("top_rated");
+                setTitle(TOP_RATED_MOVIES);
                 break;
             case R.id.favorites:
                 getAllMovies();
-                setTitle("Favorite Movies");
+                setTitle(FAVORITE_MOVIES);
                 break;
         }
 
@@ -193,8 +202,11 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
     private void launchMovieDetailActivity(int position) {
             Movie movieToSend;
-            if (getTitle() == "Favroite Movies"){
-                movieToSend = this.mMovieData.get(position);//new Movie();
+            if (getTitle() == "Favorite Movies"){
+                MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+                LiveData<List<Movie>> movies = viewModel.getMovies();
+                movieToSend = movies.getValue().get(position);//new Movie();
+
             } else {
                movieToSend = this.mMovieData.get(position);//new Movie();
             }
@@ -216,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
                         MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movies, MainActivity.this);
                         mMovieList.setAdapter(movieRecyclerViewAdapter);
                         movieRecyclerViewAdapter.notifyDataSetChanged();
-                        //setTitle("Favorite Movies");
+
 
                     }
                 });
