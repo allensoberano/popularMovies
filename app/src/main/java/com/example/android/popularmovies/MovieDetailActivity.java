@@ -49,13 +49,13 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
     private Movie mMovieSent;
     private FloatingActionButton fab;
 
-    private AppDatabase mDb2;
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
-        mDb2 = AppDatabase.getsInstance(getApplicationContext());
+        mDb = AppDatabase.getsInstance(getApplicationContext());
 
         mMovieSent = getIntent().getParcelableExtra("movie");
         int mId = mMovieSent.getmId();
@@ -263,7 +263,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
             @Override
             public void run() {
                 Log.d(TAG, "Actively query movies from database");
-                Movie movie = mDb2.movieDao().queryMovieById(mMovieSent.mId);
+                Movie movie = mDb.movieDao().queryMovieById(mMovieSent.mId);
                 mFavorited = movie != null;
 
                 //Simplify later
@@ -291,7 +291,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
             @Override
             public void run() {
                 Log.d(TAG, "Actively query movies from database");
-                mDb2.movieDao().insertMovie(movie);
+                mDb.movieDao().insertMovie(movie);
             }
         });
 
@@ -313,7 +313,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mDb2.movieDao().deleteMovie(movie);
+                mDb.movieDao().deleteMovie(movie);
             }
         });
 

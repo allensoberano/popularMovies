@@ -1,7 +1,7 @@
 package com.example.android.popularmovies;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -18,6 +18,7 @@ import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.MovieQueryTask;
 import com.example.android.popularmovies.data.AppDatabase;
+import com.example.android.popularmovies.model.MainViewModel;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 
@@ -51,8 +52,11 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             switch (mLastScreen){
                 case "Popular Movies":
                     setupPopularMovies();
-                case "Top Rated":
-                    //go to top rated
+                case "Top Rated Movies":
+                    setupPopularMovies();
+                    appendPath = "top_rated";
+                    makeMovieSearchQuery(appendPath);
+                    setTitle("Top Rated Movies");
                 case "Favorite Movies":
                     mDb = AppDatabase.getsInstance(getApplicationContext());
                     getAllMovies();
@@ -61,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             mDb = AppDatabase.getsInstance(getApplicationContext());
             getAllMovies();
             setupPopularMovies();
-
         }
 
 
@@ -189,26 +192,31 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     //endregion
 
     private void launchMovieDetailActivity(int position) {
-            Movie movieToSend = this.mMovieData.get(position);//new Movie();
+            Movie movieToSend;
+            if (getTitle() == "Favroite Movies"){
+                movieToSend = this.mMovieData.get(position);//new Movie();
+            } else {
+               movieToSend = this.mMovieData.get(position);//new Movie();
+            }
+
             Intent intent = new Intent(this, MovieDetailActivity.class);
             intent.putExtra("movie", movieToSend);
             startActivity(intent);
+
+
     }
 
     private void getAllMovies() {
 
-
-                Log.d(TAG, "Actively retrieving movies from database");
-                final LiveData<List<Movie>> mMovieData2 = mDb.movieDao().loadAllMovies();
-
-                mMovieData2.observe(MainActivity.this, new Observer<List<Movie>>() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+                viewModel.getMovies().observe(MainActivity.this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(@Nullable List<Movie> movies) {
-                        Log.d(TAG, "Receiving database update from LiveData");
+                        Log.d(TAG, "Updating movies from LiveData in ViewModel");
                         MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movies, MainActivity.this);
                         mMovieList.setAdapter(movieRecyclerViewAdapter);
                         movieRecyclerViewAdapter.notifyDataSetChanged();
-                        setTitle("Favorite Movies");
+                        //setTitle("Favorite Movies");
 
                     }
                 });
