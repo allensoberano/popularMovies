@@ -1,5 +1,6 @@
 package com.example.android.popularmovies.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ public class TrailerRVAdapter extends RecyclerView.Adapter<TrailerRVAdapter.Trai
 
     private final Trailer[] mTrailers;
     private static final String THUMBNAIL_PATH = "https://img.youtube.com/vi/";
+    @SuppressWarnings("SpellCheckingInspection")
     private static final String THUMBNAIL_IMAGE = "/hqdefault.jpg";
     private final ItemClickListener mItemClickListener;
 
@@ -28,8 +30,10 @@ public class TrailerRVAdapter extends RecyclerView.Adapter<TrailerRVAdapter.Trai
 
 
 
+
+    @NonNull
     @Override
-    public TrailerRVAdapter.TrailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrailerRVAdapter.TrailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.trailer_list_item, parent, false);
 
@@ -37,7 +41,7 @@ public class TrailerRVAdapter extends RecyclerView.Adapter<TrailerRVAdapter.Trai
     }
 
     @Override
-    public void onBindViewHolder(TrailerRVAdapter.TrailerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TrailerRVAdapter.TrailerViewHolder holder, int position) {
 
         if (mTrailers != null) {
             Picasso.get()

@@ -1,5 +1,6 @@
 package com.example.android.popularmovies.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,10 @@ public class ReviewRVAdapter extends RecyclerView.Adapter<ReviewRVAdapter.Review
 
     }
 
+
+    @NonNull
     @Override
-    public ReviewRVAdapter.ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReviewRVAdapter.ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.review_list_item, parent, false);
 
@@ -31,7 +34,7 @@ public class ReviewRVAdapter extends RecyclerView.Adapter<ReviewRVAdapter.Review
     }
 
     @Override
-    public void onBindViewHolder(ReviewRVAdapter.ReviewViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReviewRVAdapter.ReviewViewHolder holder, int position) {
         if (mReviews != null){
             holder.bind(position);
         }

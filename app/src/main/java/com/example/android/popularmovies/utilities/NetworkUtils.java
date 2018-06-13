@@ -15,24 +15,20 @@ public class NetworkUtils {
 
     //Constants to build URL String for movies
     //* Reference: Lesson02_03 Exercise build URL
+    @SuppressWarnings("SpellCheckingInspection")
     private final static String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie/";
     private final static String PARAM_QUERY = "api_key";
     private final static String YOUTUBE_BASE_URL = "https://www.youtube.com/watch";
     private final static String YOUTUBE_PARAM_QUERY = "v";
-    //final static String PRAM_SORT = "sort";
 
     //Will need to provide YOUR OWN API_Key
     private final static String API_KEY = BuildConfig.ApiKey;
 
-
     //Constants to build URL String for movie poster
     private final static String MOVIEDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
-    //final static String IMAGE_REF = "/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
-
 
     //* Reference: Lesson 02_03
     public static URL buildMoviesURL(String appendPath){
-        //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                 .appendEncodedPath(appendPath)
@@ -43,7 +39,6 @@ public class NetworkUtils {
     }
 
     public static URL buildReviewsTrailersURL(int movieId){
-        //*** CURRENTLY movieDBSearchQuery is not used until I need to put a parameter
 
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                 .appendEncodedPath(String.valueOf(movieId))

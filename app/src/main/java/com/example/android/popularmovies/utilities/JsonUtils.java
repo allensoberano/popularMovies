@@ -13,24 +13,18 @@ import java.util.List;
 
 public class JsonUtils {
 
-
-    private List<Movie> movieArray;
-
     public static List<Movie> parseMovieJson(String json) throws JSONException {
 
         JSONObject movieDetails = new JSONObject(json);
         JSONArray moviesResults = movieDetails.getJSONArray("results");
 
-        //Movie[] movieArray = new Movie[moviesResults.length()];
         List<Movie> movieArray = new ArrayList<>();
-
 
         //loop through results array, create movie object and return in MovieArray
         for (int i = 0; i <moviesResults.length(); i++){
 
             JSONObject movieData = moviesResults.getJSONObject(i);
             movieArray.add(createMovieObject(movieData));
-            //movieArray[i] = createMovieObject(movieData);
         }
 
         return movieArray;
@@ -74,8 +68,6 @@ public class JsonUtils {
         return trailer;
     }
 
-
-
     public static Review[] parseReviewJson(String json) throws JSONException {
         JSONObject allDetails = new JSONObject(json);
         JSONObject reviewsObj = allDetails.getJSONObject("reviews");
@@ -102,8 +94,6 @@ public class JsonUtils {
         review.setmContent(reviewData.optString(CONTENT));
 
         return review;
-
-
     }
 
     private static Movie createMovieObject(JSONObject movieData){

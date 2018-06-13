@@ -29,7 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
                         .build();
             }
         }
-        //Log.d(LOG_TAG, "Getting the database instance");
+
         return sInstance;
     }
 

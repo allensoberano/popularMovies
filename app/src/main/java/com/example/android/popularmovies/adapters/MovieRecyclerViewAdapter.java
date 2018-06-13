@@ -1,5 +1,6 @@
 package com.example.android.popularmovies.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +13,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
-    //private final Movie[] mMovie;
+
     private final List<Movie> mMovie;
     private final ItemClickListener mItemClickListener;
-
-
     private static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185/";
 
-
-
     //Constructor
-    public MovieRecyclerViewAdapter(List movies, ItemClickListener listener) {
+    public MovieRecyclerViewAdapter(List<Movie> movies, ItemClickListener listener) {
 
         //init member variables
         mMovie = movies;
@@ -33,8 +31,10 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
 
     //When the RecyclerView inits a new view holder instance
     //Reference: RecyclerView Webcast
+
+    @NonNull
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movie_list_item, parent, false);
 
@@ -43,7 +43,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
 
     //When RecyclerView wants to populate our view
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
 
         if (mMovie != null) {
             Picasso.get()
@@ -79,17 +79,14 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
             super(itemView);
 
             listItemImageView = itemView.findViewById(R.id.iv_movie_image);
-            //listItemImageView.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
-
 
         @Override
         public void onClick(View v) {
 
-                mItemClickListener.onItemClick(getAdapterPosition());
+            mItemClickListener.onItemClick(getAdapterPosition());
 
         }
-
     }
 }

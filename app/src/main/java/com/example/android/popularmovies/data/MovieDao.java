@@ -24,11 +24,6 @@ public interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovie(Movie movie);
 
-// --Commented out by Inspection START (6/5/18, 6:59 AM):
-//    @Update(onConflict = OnConflictStrategy.REPLACE)
-//    void updateMovie(Movie movie);
-// --Commented out by Inspection STOP (6/5/18, 6:59 AM)
-
     @Delete
     void deleteMovie(Movie movie);
 

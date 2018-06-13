@@ -16,7 +16,7 @@ public class MainViewModel extends AndroidViewModel{
     //Constant for logging
     private static final String TAG = MainViewModel.class.getSimpleName();
 
-    private LiveData<List<Movie>> movies;
+    private final LiveData<List<Movie>> movies;
 
     public MainViewModel(@NonNull Application application) {
         super(application);

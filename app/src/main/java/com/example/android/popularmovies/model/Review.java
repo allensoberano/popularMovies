@@ -1,11 +1,10 @@
 package com.example.android.popularmovies.model;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Review {
 
     private String mAuthor;
     private String mContent;
-
-
 
     public String getmAuthor() {
         return mAuthor;

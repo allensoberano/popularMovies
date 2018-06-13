@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import com.example.android.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.example.android.popularmovies.async.AsyncTaskCompleteListener;
 import com.example.android.popularmovies.async.MovieQueryTask;
-import com.example.android.popularmovies.data.AppDatabase;
 import com.example.android.popularmovies.model.MainViewModel;
 import com.example.android.popularmovies.model.Movie;
 import com.example.android.popularmovies.utilities.NetworkUtils;
@@ -32,9 +31,9 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     private RecyclerView mMovieList;
     private List<Movie> mMovieData;
     private String appendPath = "popular";
-    public final static String LIST_STATE_KEY = "rv_state";
-    public final static String LAST_SCREEN = "last_screen";
-    Parcelable rvState;
+    private final static String LIST_STATE_KEY = "rv_state";
+    private final static String LAST_SCREEN = "last_screen";
+    private Parcelable rvState;
     private String mLastScreen;
 
     //CONSTANTS
@@ -50,35 +49,32 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         mMovieList = findViewById(R.id.rv_movies);
         mMovieList.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
-        AppDatabase mDb;
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
             mLastScreen = savedInstanceState.getString(LAST_SCREEN);
 
-            switch (mLastScreen){
-                case POPULAR_MOVIES:
-                    setupPopularMovies();
-                    setTitle(POPULAR_MOVIES);
-                    break;
-                case TOP_RATED_MOVIES:
-                    setupPopularMovies();
-                    appendPath = "top_rated";
-                    makeMovieSearchQuery(appendPath);
-                    setTitle(TOP_RATED_MOVIES);
-                    break;
-                case FAVORITE_MOVIES:
-                    mDb = AppDatabase.getsInstance(getApplicationContext());
-                    getAllMovies();
-                    setTitle(FAVORITE_MOVIES);
-                    break;
+            if (mLastScreen != null) {
+                switch ((mLastScreen)) {
+                    case POPULAR_MOVIES:
+                        setupPopularMovies();
+                        setTitle(POPULAR_MOVIES);
+                        break;
+                    case TOP_RATED_MOVIES:
+                        setupPopularMovies();
+                        appendPath = "top_rated";
+                        makeMovieSearchQuery(appendPath);
+                        setTitle(TOP_RATED_MOVIES);
+                        break;
+                    case FAVORITE_MOVIES:
+                        setTitle(FAVORITE_MOVIES);
+                        getAllFavoriteMovies();
+                        break;
+                }
             }
         } else {
-            mDb = AppDatabase.getsInstance(getApplicationContext());
-            getAllMovies();
+            getAllFavoriteMovies();
             setupPopularMovies();
         }
-
-
 
     }
 
@@ -92,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
 
         //Build Search Query
         URL movieSearchUrl = NetworkUtils.buildMoviesURL(appendPath);
+
         //Run Query
         new MovieQueryTask(new MovieQueryTaskCompleteListener()).execute(movieSearchUrl);
     }
@@ -111,8 +108,6 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        //outState.putParcelableArray(LIST_STATE_KEY, mMovieData);
-
         // save list state
         rvState = mMovieList.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(LIST_STATE_KEY, rvState);
@@ -124,10 +119,8 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        //mMovieData = (Arr) savedInstanceState.getParcelableArray(LIST_STATE_KEY);
-
         //Retrieve previous state
-        if(savedInstanceState != null)
+        if (savedInstanceState != null)
             rvState = savedInstanceState.getParcelable(LIST_STATE_KEY);
 
     }
@@ -136,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
     protected void onResume() {
         super.onResume();
         if (rvState != null)
-           mMovieList.getLayoutManager().onRestoreInstanceState(rvState);
+            mMovieList.getLayoutManager().onRestoreInstanceState(rvState);
     }
 
     //region Menu
@@ -152,15 +145,18 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
         int sortByClicked = item.getItemId();
         switch (sortByClicked) {
             case R.id.popular:
+                mLastScreen = POPULAR_MOVIES;
                 makeMovieSearchQuery("popular");
                 setTitle(POPULAR_MOVIES);
                 break;
             case R.id.rating:
+                mLastScreen = TOP_RATED_MOVIES;
                 makeMovieSearchQuery("top_rated");
                 setTitle(TOP_RATED_MOVIES);
                 break;
             case R.id.favorites:
-                getAllMovies();
+                mLastScreen = FAVORITE_MOVIES;
+                getAllFavoriteMovies();
                 setTitle(FAVORITE_MOVIES);
                 break;
         }
@@ -196,42 +192,46 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerView
             mMovieData = result;
             showMovies(mMovieData);
         }
-
     }
     //endregion
 
     private void launchMovieDetailActivity(int position) {
-            Movie movieToSend;
-            if (getTitle() == "Favorite Movies"){
-                MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-                LiveData<List<Movie>> movies = viewModel.getMovies();
-                movieToSend = movies.getValue().get(position);//new Movie();
+        Movie movieToSend;
+        if (getTitle() == "Favorite Movies") {
+            MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+            LiveData<List<Movie>> movies = viewModel.getMovies();
+            movieToSend = movies.getValue().get(position);//new Movie();
 
-            } else {
-               movieToSend = this.mMovieData.get(position);//new Movie();
-            }
+        } else {
+            movieToSend = this.mMovieData.get(position);//new Movie();
+        }
 
-            Intent intent = new Intent(this, MovieDetailActivity.class);
-            intent.putExtra("movie", movieToSend);
-            startActivity(intent);
-
+        mLastScreen = getTitle().toString();
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra("movie", movieToSend);
+        startActivity(intent);
 
     }
 
-    private void getAllMovies() {
+    private void getAllFavoriteMovies() {
 
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+                MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
                 viewModel.getMovies().observe(MainActivity.this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(@Nullable List<Movie> movies) {
-                        Log.d(TAG, "Updating movies from LiveData in ViewModel");
-                        MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movies, MainActivity.this);
-                        mMovieList.setAdapter(movieRecyclerViewAdapter);
-                        movieRecyclerViewAdapter.notifyDataSetChanged();
-
+                        if(mLastScreen != null) {
+                            if (mLastScreen.equals(FAVORITE_MOVIES)) {
+                                Log.d(TAG, "Updating movies from LiveData in ViewModel");
+                                MovieRecyclerViewAdapter movieRecyclerViewAdapter = new MovieRecyclerViewAdapter(movies, MainActivity.this);
+                                mMovieList.setAdapter(movieRecyclerViewAdapter);
+                                movieRecyclerViewAdapter.notifyDataSetChanged();
+                            }
+                        }
 
                     }
                 });
+
+
     }
 }
 

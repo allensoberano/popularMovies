@@ -319,8 +319,6 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerRVA
 
 
     }
-
-
     //endregion
 
 

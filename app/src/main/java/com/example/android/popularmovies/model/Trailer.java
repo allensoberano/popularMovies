@@ -1,5 +1,6 @@
 package com.example.android.popularmovies.model;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class Trailer {
     private String id;
     private String iso_639_1;
